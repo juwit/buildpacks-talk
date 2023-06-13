@@ -1,0 +1,10 @@
+[project]
+id = "io.codeka.hello-world"
+name = "Node JS Hello World"
+version = "1.0.0"
+
+[build]
+exclude = [
+    ".git",
+    "node_modules"
+]
