@@ -117,3 +117,10 @@ On ouvre des MR/PR sur les 150 projets de l'entreprise et on espère que les dev
 Adoptez un buildpack !
 
 [](talk-logo.svg)
+
+---
+
+# Mais au fait, c'est quoi une image Docker ?
+
+On parle maintenant d'image OCI (Open Container Initiative)
+
