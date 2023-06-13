@@ -1,0 +1,31 @@
+<mxfile host="Electron" modified="2023-06-13T15:31:55.931Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="SxRnYIjsyKBeDzzjl2p7" version="21.2.8" type="device">
+  <diagram name="image-layers" id="1Ttg33wdf2TBwmpcnNgZ">
+    <mxGraphModel dx="462" dy="855" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="f7gBdi9Igt3aAUvKKh6F-1" value="ubuntu:jammy" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#f06766;fontFamily=Helvetica;fontStyle=1;fontColor=#1A1A1A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="f7gBdi9Igt3aAUvKKh6F-2" value="eclipse-temurin:17-jdk" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#f58260;fontFamily=Helvetica;fontStyle=1;fontColor=#1A1A1A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="f7gBdi9Igt3aAUvKKh6F-3" value="homer-simpson" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#ffc152;fontFamily=Helvetica;fontStyle=1;fontColor=#1A1A1A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="f7gBdi9Igt3aAUvKKh6F-4" value="ubuntu:jammy" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#f06766;fontFamily=Helvetica;fontStyle=1;fontColor=#1A1A1A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="320" width="330" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="f7gBdi9Igt3aAUvKKh6F-5" value="eclipse-temurin:17-jdk" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#f58260;fontFamily=Helvetica;fontStyle=1;fontColor=#1A1A1A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="330" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="f7gBdi9Igt3aAUvKKh6F-6" value="homer-simpson" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#ffc152;fontFamily=Helvetica;fontStyle=1;fontColor=#1A1A1A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="f7gBdi9Igt3aAUvKKh6F-7" value="lisa-simpson" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#ffc152;fontFamily=Helvetica;fontStyle=1;fontColor=#1A1A1A;" vertex="1" parent="1">
+          <mxGeometry x="210" y="240" width="160" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -105,7 +105,15 @@ pack CLI
 ```bash
 pack build petclinic:google-v1 --builder gcr.io/buildpacks/builder:v1 -e GOOGLE_RUNTIME_VERSION=17
 
+docker image tag petclinic:google-v1 rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:google-v1
+
+docker push rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:google-v1
+
 pack build petclinic:google-22 --builder gcr.io/buildpacks/builder:google-22 -e GOOGLE_RUNTIME_VERSION=17
+
+docker image tag petclinic:google-22 rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:google-22
+
+docker push rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:google-22
 ```
 
 Produit des images contenant le source !
@@ -114,7 +122,19 @@ Produit des images contenant le source !
 ## Le build pack spring-boot de paketo
 
 ```bash
-pack build petclinic:paketo --builder paketobuildpacks/builder:base
+pack build petclinic:paketo-base --builder paketobuildpacks/builder:base
+
+docker image tag petclinic:paketo-base rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-base
+
+docker push rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-base
+```
+
+```bash
+pack build petclinic:paketo-tiny --builder paketobuildpacks/builder:tiny
+
+docker image tag petclinic:paketo-tiny rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-tiny
+
+docker push rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-tiny
 ```
 
 optimisé (avec maven uniquement)
@@ -131,7 +151,9 @@ java.runtime.version=17
 ```
 
 ```bash
-pack build petclinic:heroku --bu_ilder heroku/builder:22
+pack build rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:heroku --builder heroku/builder:22
+
+docker push rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:heroku
 ```
 
 # Registry + browser

@@ -1,0 +1,9 @@
+services:
+  registry-browser:
+    image: klausmeyer/docker-registry-browser
+    ports:
+      - "5001:8080"
+    environment:
+      - DOCKER_REGISTRY_URL=https://rg.fr-par.scw.cloud
+      - TOKEN_AUTH_USER=nologin
+      - TOKEN_AUTH_PASSWORD=31f59ec6-d256-4b38-a914-a7886046adc1
