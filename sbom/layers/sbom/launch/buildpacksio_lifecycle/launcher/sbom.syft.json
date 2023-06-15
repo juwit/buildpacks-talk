@@ -1,0 +1,471 @@
+{
+ "artifacts": [
+  {
+   "id": "deb86f5e2a176c12",
+   "name": "github.com/BurntSushi/toml",
+   "version": "v1.1.0",
+   "type": "go-module",
+   "foundBy": "go-module-binary-cataloger",
+   "locations": [
+    {
+     "path": "/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [],
+   "language": "go",
+   "cpes": [
+    "cpe:2.3:a:BurntSushi:toml:v1.1.0:*:*:*:*:*:*:*"
+   ],
+   "purl": "pkg:golang/github.com/BurntSushi/toml@v1.1.0",
+   "metadataType": "GolangBinMetadata",
+   "metadata": {
+    "goCompiledVersion": "go1.19.10",
+    "architecture": "amd64",
+    "h1Digest": "h1:ksErzDEI1khOiGPgpwuI7x2ebx/uXQNw7xJpn9Eq1+I=",
+    "mainModule": "github.com/buildpacks/lifecycle"
+   }
+  },
+  {
+   "id": "85f683ab3a25d6f9",
+   "name": "github.com/apex/log",
+   "version": "v1.9.0",
+   "type": "go-module",
+   "foundBy": "go-module-binary-cataloger",
+   "locations": [
+    {
+     "path": "/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [],
+   "language": "go",
+   "cpes": [
+    "cpe:2.3:a:apex:log:v1.9.0:*:*:*:*:*:*:*"
+   ],
+   "purl": "pkg:golang/github.com/apex/log@v1.9.0",
+   "metadataType": "GolangBinMetadata",
+   "metadata": {
+    "goCompiledVersion": "go1.19.10",
+    "architecture": "amd64",
+    "h1Digest": "h1:FHtw/xuaM8AgmvDDTI9fiwoAL25Sq2cxojnZICUU8l0=",
+    "mainModule": "github.com/buildpacks/lifecycle"
+   }
+  },
+  {
+   "id": "ed1dfba7fc75683c",
+   "name": "github.com/buildpacks/lifecycle",
+   "version": "v0.16.4",
+   "type": "go-module",
+   "foundBy": "go-module-binary-cataloger",
+   "locations": [
+    {
+     "path": "/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [],
+   "language": "go",
+   "cpes": [
+    "cpe:2.3:a:buildpacks:lifecycle:v0.16.4:*:*:*:*:*:*:*"
+   ],
+   "purl": "pkg:golang/github.com/buildpacks/lifecycle@v0.16.4",
+   "metadataType": "GolangBinMetadata",
+   "metadata": {
+    "goBuildSettings": {
+     "-compiler": "gc",
+     "-ldflags": "-s -w -X 'github.com/buildpacks/lifecycle/cmd.SCMRepository=github.com/buildpacks/lifecycle' -X 'github.com/buildpacks/lifecycle/cmd.SCMCommit=683e1b46' -X 'github.com/buildpacks/lifecycle/cmd.Version=0.16.4'",
+     "CGO_ENABLED": "0",
+     "GOAMD64": "v1",
+     "GOARCH": "amd64",
+     "GOOS": "linux",
+     "vcs": "git",
+     "vcs.modified": "true",
+     "vcs.revision": "683e1b46c580bb0e342c5a612aafe978298bb56e",
+     "vcs.time": "2023-06-07T17:15:54Z"
+    },
+    "goCompiledVersion": "go1.19.10",
+    "architecture": "amd64",
+    "mainModule": "github.com/buildpacks/lifecycle"
+   }
+  },
+  {
+   "id": "bfd9a0dafc9a865d",
+   "name": "github.com/google/go-cmp",
+   "version": "v0.5.9",
+   "type": "go-module",
+   "foundBy": "go-module-binary-cataloger",
+   "locations": [
+    {
+     "path": "/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [],
+   "language": "go",
+   "cpes": [
+    "cpe:2.3:a:google:go-cmp:v0.5.9:*:*:*:*:*:*:*",
+    "cpe:2.3:a:google:go_cmp:v0.5.9:*:*:*:*:*:*:*"
+   ],
+   "purl": "pkg:golang/github.com/google/go-cmp@v0.5.9",
+   "metadataType": "GolangBinMetadata",
+   "metadata": {
+    "goCompiledVersion": "go1.19.10",
+    "architecture": "amd64",
+    "h1Digest": "h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=",
+    "mainModule": "github.com/buildpacks/lifecycle"
+   }
+  },
+  {
+   "id": "af0dbeadeb021251",
+   "name": "github.com/heroku/color",
+   "version": "v0.0.6",
+   "type": "go-module",
+   "foundBy": "go-module-binary-cataloger",
+   "locations": [
+    {
+     "path": "/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [],
+   "language": "go",
+   "cpes": [
+    "cpe:2.3:a:heroku:color:v0.0.6:*:*:*:*:*:*:*"
+   ],
+   "purl": "pkg:golang/github.com/heroku/color@v0.0.6",
+   "metadataType": "GolangBinMetadata",
+   "metadata": {
+    "goCompiledVersion": "go1.19.10",
+    "architecture": "amd64",
+    "h1Digest": "h1:UTFFMrmMLFcL3OweqP1lAdp8i1y/9oHqkeHjQ/b/Ny0=",
+    "mainModule": "github.com/buildpacks/lifecycle"
+   }
+  },
+  {
+   "id": "5a0ce0ad0d23f7d0",
+   "name": "github.com/mattn/go-colorable",
+   "version": "v0.1.13",
+   "type": "go-module",
+   "foundBy": "go-module-binary-cataloger",
+   "locations": [
+    {
+     "path": "/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [],
+   "language": "go",
+   "cpes": [
+    "cpe:2.3:a:mattn:go-colorable:v0.1.13:*:*:*:*:*:*:*",
+    "cpe:2.3:a:mattn:go_colorable:v0.1.13:*:*:*:*:*:*:*"
+   ],
+   "purl": "pkg:golang/github.com/mattn/go-colorable@v0.1.13",
+   "metadataType": "GolangBinMetadata",
+   "metadata": {
+    "goCompiledVersion": "go1.19.10",
+    "architecture": "amd64",
+    "h1Digest": "h1:fFA4WZxdEF4tXPZVKMLwD8oUnCTTo08duU7wxecdEvA=",
+    "mainModule": "github.com/buildpacks/lifecycle"
+   }
+  },
+  {
+   "id": "327b76863517df3b",
+   "name": "github.com/mattn/go-isatty",
+   "version": "v0.0.17",
+   "type": "go-module",
+   "foundBy": "go-module-binary-cataloger",
+   "locations": [
+    {
+     "path": "/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [],
+   "language": "go",
+   "cpes": [
+    "cpe:2.3:a:mattn:go-isatty:v0.0.17:*:*:*:*:*:*:*",
+    "cpe:2.3:a:mattn:go_isatty:v0.0.17:*:*:*:*:*:*:*"
+   ],
+   "purl": "pkg:golang/github.com/mattn/go-isatty@v0.0.17",
+   "metadataType": "GolangBinMetadata",
+   "metadata": {
+    "goCompiledVersion": "go1.19.10",
+    "architecture": "amd64",
+    "h1Digest": "h1:BTarxUcIeDqL27Mc+vyvdWYSL28zpIhv3RoTdsLMPng=",
+    "mainModule": "github.com/buildpacks/lifecycle"
+   }
+  },
+  {
+   "id": "fd21c8ee887ef54a",
+   "name": "github.com/pkg/errors",
+   "version": "v0.9.1",
+   "type": "go-module",
+   "foundBy": "go-module-binary-cataloger",
+   "locations": [
+    {
+     "path": "/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [],
+   "language": "go",
+   "cpes": [
+    "cpe:2.3:a:pkg:errors:v0.9.1:*:*:*:*:*:*:*"
+   ],
+   "purl": "pkg:golang/github.com/pkg/errors@v0.9.1",
+   "metadataType": "GolangBinMetadata",
+   "metadata": {
+    "goCompiledVersion": "go1.19.10",
+    "architecture": "amd64",
+    "h1Digest": "h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=",
+    "mainModule": "github.com/buildpacks/lifecycle"
+   }
+  },
+  {
+   "id": "99332e61cc9748fc",
+   "name": "golang.org/x/sys",
+   "version": "v0.7.0",
+   "type": "go-module",
+   "foundBy": "go-module-binary-cataloger",
+   "locations": [
+    {
+     "path": "/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher",
+     "annotations": {
+      "evidence": "primary"
+     }
+    }
+   ],
+   "licenses": [],
+   "language": "go",
+   "cpes": [
+    "cpe:2.3:a:golang:x\\/sys:v0.7.0:*:*:*:*:*:*:*"
+   ],
+   "purl": "pkg:golang/golang.org/x/sys@v0.7.0",
+   "metadataType": "GolangBinMetadata",
+   "metadata": {
+    "goCompiledVersion": "go1.19.10",
+    "architecture": "amd64",
+    "h1Digest": "h1:3jlCCIQZPdOYu1h8BkNvLz8Kgwtae2cagcG/VamtZRU=",
+    "mainModule": "github.com/buildpacks/lifecycle"
+   }
+  }
+ ],
+ "artifactRelationships": [
+  {
+   "parent": "327b76863517df3b",
+   "child": "538c74d52de17dce",
+   "type": "evident-by"
+  },
+  {
+   "parent": "5a0ce0ad0d23f7d0",
+   "child": "538c74d52de17dce",
+   "type": "evident-by"
+  },
+  {
+   "parent": "85f683ab3a25d6f9",
+   "child": "538c74d52de17dce",
+   "type": "evident-by"
+  },
+  {
+   "parent": "95a697f76fb128cf11580e61917727c22f9d949b2abf930780e999a21074a4b5",
+   "child": "327b76863517df3b",
+   "type": "contains"
+  },
+  {
+   "parent": "95a697f76fb128cf11580e61917727c22f9d949b2abf930780e999a21074a4b5",
+   "child": "5a0ce0ad0d23f7d0",
+   "type": "contains"
+  },
+  {
+   "parent": "95a697f76fb128cf11580e61917727c22f9d949b2abf930780e999a21074a4b5",
+   "child": "85f683ab3a25d6f9",
+   "type": "contains"
+  },
+  {
+   "parent": "95a697f76fb128cf11580e61917727c22f9d949b2abf930780e999a21074a4b5",
+   "child": "99332e61cc9748fc",
+   "type": "contains"
+  },
+  {
+   "parent": "95a697f76fb128cf11580e61917727c22f9d949b2abf930780e999a21074a4b5",
+   "child": "af0dbeadeb021251",
+   "type": "contains"
+  },
+  {
+   "parent": "95a697f76fb128cf11580e61917727c22f9d949b2abf930780e999a21074a4b5",
+   "child": "bfd9a0dafc9a865d",
+   "type": "contains"
+  },
+  {
+   "parent": "95a697f76fb128cf11580e61917727c22f9d949b2abf930780e999a21074a4b5",
+   "child": "deb86f5e2a176c12",
+   "type": "contains"
+  },
+  {
+   "parent": "95a697f76fb128cf11580e61917727c22f9d949b2abf930780e999a21074a4b5",
+   "child": "ed1dfba7fc75683c",
+   "type": "contains"
+  },
+  {
+   "parent": "95a697f76fb128cf11580e61917727c22f9d949b2abf930780e999a21074a4b5",
+   "child": "fd21c8ee887ef54a",
+   "type": "contains"
+  },
+  {
+   "parent": "99332e61cc9748fc",
+   "child": "538c74d52de17dce",
+   "type": "evident-by"
+  },
+  {
+   "parent": "af0dbeadeb021251",
+   "child": "538c74d52de17dce",
+   "type": "evident-by"
+  },
+  {
+   "parent": "bfd9a0dafc9a865d",
+   "child": "538c74d52de17dce",
+   "type": "evident-by"
+  },
+  {
+   "parent": "deb86f5e2a176c12",
+   "child": "538c74d52de17dce",
+   "type": "evident-by"
+  },
+  {
+   "parent": "ed1dfba7fc75683c",
+   "child": "538c74d52de17dce",
+   "type": "evident-by"
+  },
+  {
+   "parent": "fd21c8ee887ef54a",
+   "child": "538c74d52de17dce",
+   "type": "evident-by"
+  }
+ ],
+ "files": [
+  {
+   "id": "538c74d52de17dce",
+   "location": {
+    "path": "/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher"
+   }
+  }
+ ],
+ "source": {
+  "id": "95a697f76fb128cf11580e61917727c22f9d949b2abf930780e999a21074a4b5",
+  "type": "file",
+  "target": "/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher"
+ },
+ "distro": {},
+ "descriptor": {
+  "name": "syft",
+  "version": "0.83.0",
+  "configuration": {
+   "configPath": "",
+   "verbosity": 0,
+   "quiet": false,
+   "output": [
+    "json=/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher.sbom.syft.json",
+    "spdx-json=/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher.sbom.spdx.json",
+    "cyclonedx-json=/home/runner/work/lifecycle/lifecycle/out/linux-amd64/lifecycle/launcher.sbom.cdx.json"
+   ],
+   "output-template-path": "",
+   "file": "",
+   "check-for-app-update": true,
+   "dev": {
+    "profile-cpu": false,
+    "profile-mem": false
+   },
+   "log": {
+    "structured": false,
+    "level": "warn",
+    "file-location": ""
+   },
+   "catalogers": null,
+   "package": {
+    "cataloger": {
+     "enabled": true,
+     "scope": "Squashed"
+    },
+    "search-unindexed-archives": false,
+    "search-indexed-archives": true
+   },
+   "golang": {
+    "search-local-mod-cache-licenses": false,
+    "local-mod-cache-dir": "",
+    "search-remote-licenses": false,
+    "proxy": "",
+    "no-proxy": ""
+   },
+   "linux-kernel": {
+    "catalog-modules": true
+   },
+   "attest": {},
+   "file-metadata": {
+    "cataloger": {
+     "enabled": false,
+     "scope": "Squashed"
+    },
+    "digests": [
+     "sha256"
+    ]
+   },
+   "file-classification": {
+    "cataloger": {
+     "enabled": false,
+     "scope": "Squashed"
+    }
+   },
+   "file-contents": {
+    "cataloger": {
+     "enabled": false,
+     "scope": "Squashed"
+    },
+    "skip-files-above-size": 1048576,
+    "globs": []
+   },
+   "secrets": {
+    "cataloger": {
+     "enabled": false,
+     "scope": "AllLayers"
+    },
+    "additional-patterns": {},
+    "exclude-pattern-names": [],
+    "reveal-values": false,
+    "skip-files-above-size": 1048576
+   },
+   "registry": {
+    "insecure-skip-tls-verify": false,
+    "insecure-use-http": false,
+    "auth": []
+   },
+   "exclude": [],
+   "platform": "",
+   "name": "",
+   "source-name": "",
+   "source-version": "",
+   "parallelism": 1,
+   "default-image-pull-source": ""
+  }
+ },
+ "schema": {
+  "version": "8.0.1",
+  "url": "https://raw.githubusercontent.com/anchore/syft/main/schema/json/schema-8.0.1.json"
+ }
+}

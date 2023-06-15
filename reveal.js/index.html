@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/theme/white-contrast.css">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css">
+
+    <style>
+        body {
+            border-top: solid 10px #EF5E68;
+        }
+
+        i {
+            font-style: italic;
+        }
+
+        .two-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+          }
+
+        .logo-hell {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        }
+
+        .logo-hell > span {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            font-size: 2rem;
+        }
+        .logo-hell > span > img
+        {
+            max-width: 10rem;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="reveal">
+
+    <!-- TODO theming général -->
+    <!-- TODO theme de highlight -->
+
+
+    <div class="slides">
+
+        <section>
+            <h1>Laissez tomber vos Dockerfile, adoptez un buildpack !</h1>
+        </section>
+
+        <section>
+            <h1>Vous êtes au bon endroit si</h1>
+            <ul>
+                <li>Vous êtes un·e Dev 🙋‍♀️</li>
+                <li>Vous être un·e Ops 🙋‍♂️</li>
+                <li>Vous faites joujou avec Docker 🐳</li>
+            </ul>
+        </section>
+
+        <!-- TODO slide de présentation -->
+        <section>
+            <h2>Exécuter une application dans un container, c'est facile</h2>
+            <h2>Un Dockerfile 🐋 et hop 🚀, en prod !</h2>
+        </section>
+
+        <section>
+            <h2>J'écris des (mauvais) Dockerfile depuis 2015 <span class="fragment">🤮</span></h2>
+            <div class="two-cols">
+                <pre><code data-trim data-noescape data-line-numbers>
+    FROM node:latest
+    COPY . .
+    RUN npm install
+    CMD ["npm", "start"]
+      </code></pre>
+                <pre><code data-trim data-noescape data-line-numbers>
+    FROM openjdk:latest
+    COPY . .
+    CMD ["./mvnw", "spring-boot:run"]
+      </code></pre>
+            </div>
+            <p class="fragment">Comment éviter ça sur des projets ?</p>
+        </section>
+
+        <section>
+            <h2>Le <i>Hello World</i> Spring Boot, selon Docker 🤮</h2>
+            <p><a href="https://www.docker.com/blog/kickstart-your-spring-boot-application-development/">www.docker.com/blog</a>
+            </p>
+
+            <pre><code data-trim data-noescape data-line-numbers="|1|5-7|9|11">
+FROM eclipse-temurin:17-jdk-focal
+
+WORKDIR /app
+
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:go-offline
+
+COPY src ./src
+
+CMD ["./mvnw", "spring-boot:run"]
+  </code></pre>
+        </section>
+
+        <section>
+            <h2>Le <i>Hello World</i> Spring Boot, selon Spring Boot 🤔</h2>
+            <p><a href="https://spring.io/guides/topicals/spring-boot-docker/">spring.io/guides</a>
+            </p>
+
+            <pre><code data-trim data-noescape data-line-numbers="|1,13|5-10|11|16-17|20-23|24">
+# build stage
+FROM eclipse-temurin:17-jdk-alpine as build
+WORKDIR /workspace/app
+
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+COPY src src
+
+RUN ./mvnw install -DskipTests
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
+
+# run stage
+FROM eclipse-temurin:17-jdk-alpine
+
+RUN addgroup -S demo && adduser -S demo -G demo
+USER demo
+
+VOLUME /tmp
+ARG DEPENDENCY=/workspace/app/target/dependency
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
+ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
+  </code></pre>
+        </section>
+
+        <section>
+            <!-- TODO Style pour la balise <code> toute seule -->
+            <p>Est-ce que ce <code>Dockerfile</code> était parfait ?</p>
+            <p>Est-ce qu'on attend d'un développeur l'écriture d'un tel <code>Dockerfile</code> ?</p>
+            <!-- TODO Code JS qui entoure certains mots de <code> ou de <i> -->
+        </section>
+
+        <section>
+            <h2>Comment font la plupart des développeurs qui doivent écrire un Dockerfile ?</h2>
+            <ul>
+                <li>Au pire : Stackoverflow, ou un tutoriel random</li>
+                <li>Bof : le Dockerfile de Spring Boot, ou NodeJs, sans le comprendre</li>
+                <li>Mieux : ils sont experts Docker, ou un Ops écrit le Dockerfile avec eux</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Aucun être humain ne devrait écrire des Dockerfile, ou des tonnes de YAML</h2>
+        </section>
+
+        <section>
+            <h2>Comment font les entreprises ?</h2>
+            <p>Une grosse DSI, avec plein de projets sympas</p>
+            <p>Chaque projet a son propre Dockerfile, forcément différent des autres</p>
+            <h3>Bienvenue en enfer</h3>
+            <p>Ouvrir des change-request sur les 150+ projets de l'entreprise pour mettre à jour les Dockerfile</p>
+        </section>
+
+        <section>
+            <h2>Ce qu'on demandait au devs avant 2015 : </h2>
+            <ul>
+                <li>Une application qui marche, sur un runtime installé par les Ops</li>
+                <li>Configurable (fichiers ou variables d'environnement)</li>
+                <li>Bonnes pratiques de code sécurisé (Injections/OWASP...)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Ce qu'on demande au devs : </h2>
+            <ul>
+                <li>Une application qui marche, sur un runtime embarqué</li>
+            </ul>
+            <ul>
+                <li>
+                    Une application qui marche
+                    <ul>
+                        <li>Paramétrable (variables d'environnement)</li>
+                        <li>Quel runtime ?</li>
+                        <li>JDK ? JRE ? GraalVM ? Compilation native ?</li>
+                        <li>NodeJS ? Deno ?</li>
+                        <li>Nginx ? HTTPD ?</li>
+                    </ul>
+                </li>
+                <li>
+                    Sécurité
+                    <ul>
+                        <li>User non-root</li>
+                        <li>Versions des packages / runtime à jour</li>
+                        <li>Pas de code source dans l'image finale</li>
+                        <li>Pouvoir patcher les images en cas de nouvelle faille</li>
+                    </ul>
+                </li>
+                <li>
+                    Optimisation
+                    <ul>
+                        <li>Layers minimales</li>
+                        <li>Distribution ou Distroless</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <section data-background-image="assets/thinking.jpg" data-background-opacity="0.5">
+            <h1>L'instant philosophie</h1>
+            <p>DevOps, c'est les Devs qui font de l'Ops et les Ops qui font du Dev ?</p>
+            <p>DevOps, c'est no-Ops ?</p>
+        </section>
+
+        <section>
+            <h1>Mais au fait, c'est quoi une image <s>Docker</s> OCI ?</h1>
+
+            <p>On parle maintenant d'image OCI (Open Container Initiative)</p>
+
+            Normalisé : <a href="https://github.com/opencontainers/image-spec/blob/main/spec.md">https://github.com/opencontainers/image-spec/blob/main/spec.md</a>
+
+        </section>
+        <section>
+            <h2>La vision qu'on a souvent :</h2>
+
+            <p>Les layers :</p>
+
+            <img src="assets/buildpacks-diagrams-image-layers.svg"/>
+
+            <p>distrib + runtime/middleware + code</p>
+        </section>
+        <section>
+            <h2>En fait, c'est surtout un bout de JSON qui référence des TAR.GZ</h2>
+            <p>On appelle ça un <i>Manifest</i></p>
+            <pre><code data-trim data-noescape data-line-numbers="|4-25|26-30">
+{
+	"schemaVersion": 2,
+	"mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+	"layers": [
+		{
+			"mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+			"size": 30430275,
+			"digest": "sha256:d1669123f28121211977ed38e663dca1a397c0c001e5386598b96c89b1b1cd51"
+		},
+		{
+			"mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+			"size": 17038759,
+			"digest": "sha256:2ec73b48ae406646223453ca41d5d6b7cb739853fb7a44f15d35a31c238271d2"
+		},
+		{
+			"mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+			"size": 192587566,
+			"digest": "sha256:9dbb3ddf83e9096c0e2f32bfa93d16285d2e9586b1a9aa25e33d04cf01d521c7"
+		},
+		{
+			"mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+			"size": 175,
+			"digest": "sha256:08d2567dd626029019cc940915699f23b075d05189d99319604fbdae3768fa36"
+		}
+	],
+	"config": {
+		"mediaType": "application/vnd.docker.container.image.v1+json",
+		"size": 6305,
+		"digest": "sha256:50440189b0f4cd6264c2f03f92acf4772680d864e3a0d422ef4c463733e139df"
+	}
+}
+            </code></pre>
+
+        </section>
+        <section>
+            <h2>La configuration aussi fait partie de l'image OCI !</h2>
+            <ul>
+                <li>architecture / OS</li>
+                <li>variables d'environnements</li>
+                <li>users</li>
+                <li>labels</li>
+                <li>commandes / entrypoints</li>
+                <li>ports</li>
+            </ul>
+        </section>
+        <section>
+            <p>Configuration de l'image <code>eclipse-temurin:17.0.7_7-jdk</code></p>
+            <pre><code data-trim data-noescape data-line-numbers="|2|13-20|6|29-32|21-23">
+{
+	"architecture": "amd64",
+	"config": {
+		"Hostname": "",
+		"Domainname": "",
+		"User": "",
+		"AttachStdin": false,
+		"AttachStdout": false,
+		"AttachStderr": false,
+		"Tty": false,
+		"OpenStdin": false,
+		"StdinOnce": false,
+		"Env": [
+			"PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+			"JAVA_HOME=/opt/java/openjdk",
+			"LANG=en_US.UTF-8",
+			"LANGUAGE=en_US:en",
+			"LC_ALL=en_US.UTF-8",
+			"JAVA_VERSION=jdk-17.0.7+7"
+		],
+		"Cmd": [
+			"jshell"
+		],
+		"Image": "sha256:1dcdc9129900e8da6859de2013f135eb56cc4b67e04ceda95e957b9555c865a2",
+		"Volumes": null,
+		"WorkingDir": "",
+		"Entrypoint": null,
+		"OnBuild": null,
+		"Labels": {
+			"org.opencontainers.image.ref.name": "ubuntu",
+			"org.opencontainers.image.version": "22.04"
+		}
+	},
+	"created": "2023-06-02T01:44:46.577735785Z",
+	"docker_version": "20.10.23",
+	"os": "linux",
+	"rootfs": {
+		"type": "layers",
+		"diff_ids": [
+			"sha256:966e94ab6e166fb358a208cfd8169d22dea352501c96700eb7f45092a2962ee6",
+			"sha256:c06103114e6ae337714908c1ee4fd815a6d6b364703cbea6050aa10bb82151ec",
+			"sha256:e9c496514aa7ec95474908ee8e0f00f1c20756740be194a097111801f77ba29b",
+			"sha256:be8cd3ceb782d42ec828a1e53b009d8f70e80c4a5ffa9912ec59349d0a761ce5"
+		]
+	}
+}
+  </code></pre>
+        </section>
+
+        <section>
+            <h2>Une image OCI</h2>
+            <ul>
+                <li>Des fichiers <code>tar.gz</code></li>
+                <li>Chaque fichier a un digest <code>sha256</code></li>
+                <li>De la configuration au format JSON</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Et si ?</h2>
+            <p>On pouvait générer tout ça ?</p>
+            <p>On pourrait créer des images OCI, sans avoir besoin de Docker ou d'un Dockerfile !</p>
+        </section>
+
+
+        <section data-background-image="assets/thinking.jpg" data-background-opacity="0.5">
+            <h1>L'instant philosophie</h1>
+            <p>ça veut aussi dire, qu'on peut modifier une image, juste en allant modifier son manifest</p>
+            <img src="assets/buildpacks-diagrams-image-layers-rebase.svg"/>
+            <aside class="notes">
+                <p>sans forcément devoir passer par un process de reconstruction</p>
+                <p>par exemple, remplacer une ou plusieurs layers associées à des distributions ou runtime, sans devoir rebuilder, pratique pour patcher de la sécurité</p>
+            </aside>
+        </section>
+
+
+        <section>
+            <h1>Adoptez un buildpack !</h1>
+            <img src="assets/talk-logo.svg"/>
+        </section>
+
+        <section>
+            <h1>Les buildpacks, génèrent des images Docker, sans avoir besoin de Dockerfile</h1>
+            <p>On décharge les développeurs de savoir implémenter toutes les bonnes pratiques Docker</p>
+        </section>
+
+        <section>
+            <h1>Buildpacks</h1>
+            <p>Conçu par Heroku en <u>2011</u> pour leur propre besoin de PaaS multi-langage.</p>
+            <p>Le concept est plus vieux que Docker (2013)</p>
+            <p>CNB (Cloud Native Buildpacks) initié en 2018, et a rejoint la CNCF (Cloud Native Computing Foundation) en 2018 en "Incubating".</p>
+        </section>
+
+        <section>
+            <h2>Qui l'utilise en production ? Est-ce que c'est mature ?</h2>
+
+            <div class="logo-hell">
+                <span class="fragment">
+                    <img src="assets/logos/app_engine.png"/>
+                    <span>Google App Engine</span>
+                </span>
+                <span class="fragment">
+                    <img src="assets/logos/cloud_run.png"/>
+                    <span>Google Cloud Run</span>
+                </span>
+                <span class="fragment">
+                    <img src="assets/logos/cloud_functions.png"/>
+                    <span>Google Cloud Functions</span>
+                </span>
+                <span class="fragment">
+                    <img src="assets/logos/azure-container-apps-logo.png"/>
+                    <span>Azure Container Apps</span>
+                </span>
+                <span class="fragment">
+                    <img src="assets/logos/gitlab_logo.png"/>
+                    <span>Gitlab Auto DevOps</span>
+                </span>
+                <span class="fragment">
+                    <img src="assets/logos/knative-logo-rgb.png"/>
+                    <span>KNative</span>
+                </span>
+                <span class="fragment">
+                    <img src="assets/logos/dokku-logo.png"/>
+                    <span>Dokku</span>
+                </span>
+                <span class="fragment">
+                    <img src="assets/logos/spring-boot.png"/>
+                    <span>Spring Boot (mvn spring-boot:build-image)</span>
+                </span>
+                <span class="fragment">
+                    <img src="assets/logos/riff-logo.png"/>
+                    <span>Riff (Netlify)</span>
+                </span>
+            </div>
+        </section>
+
+        <section>
+            <h2>C'est quoi les CNB ? Comment ça fonctionne ?</h2>
+            <ul>
+                <li>builder : une image OCI qui va contenir tous les scripts et buildpacks pour construire une application</li>
+                <li>les buildpacks : implémentent chacun une logique de construction pour un langage ou un runtime</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Un buildpack est composé de 2 fichiers :</h2>
+            <ul>
+                <li>bin/detect : indique si le buildpack doit être activé</li>
+                <li>bin/build : contribue à la construction d'une ou plusieurs layers</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Le builder contient des scripts "lifecycle" qui :</h2>
+            <ol>
+                <li>Montent le code source dans un répertoire <code>/workspace</code></li>
+                <li>Interrogent chaque buildpack avec "detect"</li>
+                <li>Exécutent tous les buildpacks qui doivent être exécutés</li>
+                <li>Chaque buildpack contribue une ou plusieurs layers dans <code>/layer</code></li>
+                <li>Les layers dans <code>/layer</code> sont exportées pour créer une image OCI !</li>
+            </ol>
+        </section>
+        <section>
+            <div class="r-stack">
+                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-1.svg"/>
+                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-2.svg"/>
+                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-3.svg"/>
+                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-4.svg"/>
+                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-5.svg"/>
+                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-6.svg"/>
+                <img class="fragment fade-in" src="assets/buildpacks-diagrams-builder-all.svg"/>
+            </div>
+        </section>
+        <section>
+            <h2>Mais aussi</h2>
+            <ul>
+                <li>Le builder peut charger du cache depuis un registry OCI  (<code>.m2/</code>, <code>node_modules/</code>)</li>
+                <li>Les layers peuvent être reproductibles</li>
+                <li>Le builder ne s'exécute pas en <code>root</code></li>
+            </ul>
+        </section>
+        <section>
+            <h1>Outillage</h1>
+            <p>Le CLI <code>pack</code> permet d'exécuter des builders, pour construire des images.</p>
+            <pre><code data-trim data-noescape class="language-bash">
+sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
+sudo apt-get update
+sudo apt-get install pack-cli
+            </code></pre>
+            <pre><code data-trim data-noescape class="language-bash">
+                pack --help
+            </code></pre>
+        </section>
+        <section>
+            <h1>Démo !</h1>
+            <pre><code data-trim data-noescape class="language-bash">
+# construction d'une image
+pack build petclinic:demo --builder paketobuildpacks/builder:base
+            </code></pre>
+
+            <pre><code data-trim data-noescape class="language-bash">
+# parcours des layers construite avec dive
+dive petclinic:demo
+            </code></pre>
+
+            <pre><code data-trim data-noescape class="language-bash">
+# inspection de l'image
+docker image inspect petclinic:demo | bat -l json
+            </code></pre>
+
+            <pre><code data-trim data-noescape class="language-bash">
+# pull d'une image construite précédemment
+docker image pull rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-base
+            </code></pre>
+
+            <pre><code data-trim data-noescape class="language-bash">
+# comparaison des layers
+docker image inspect petclinic:demo | jq '.[].RootFS'
+docker image inspect rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-base | jq '.[].RootFS'
+
+diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image inspect rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-base | jq '.[].RootFS')
+            </code></pre>
+        </section>
+
+        <section>
+            <h1>L'image produite</h1>
+            <!-- TODO schéma à gauche -->
+            <img src="assets/buildpacks-diagrams-image-layers-buildpacks.svg"/>
+            <p>Respecte les bonnes pratiques de layering de Spring Boot</p>
+            <p>Est plus légère que celle proposée par Spring Boot</p>
+            <pre><code>
+REPOSITORY   TAG             IMAGE ID       CREATED         SIZE
+petclinic    dockerfile      3c06306a5640   7 minutes ago   409MB
+petclinic    demo            c3448bd3501d   43 years ago    315MB
+            </code></pre>
+            <p>Chaque buildpack contribue à la construction d'un SBoM dans une layer dédiée (Software Bill Of Material)</p>
+        </section>
+
+        <section>
+            <h1>Une image produite pour une appli NodeJS</h1>
+            <img src="assets/buildpacks-diagrams-image-layers-buildpacks-node.svg"/>
+            <p>Layer <code>node_modules</code></p>
+        </section>
+
+        <section>
+            <h1>Reproductibilité des builds</h1>
+            <p>À partir du même code source, produit strictement le même binaire / la même image, avec le même digest sha256 !</p>
+            <p>Nécessite de mettre à <code>"0"</code> les dates des fichiers.</p>
+            <pre><code class="language-json">"Created": "1980-01-01T00:00:01Z"</code></pre>
+            <pre><code data-trim data-noescape class="language-bash">
+REPOSITORY   TAG             IMAGE ID       CREATED        SIZE
+petclinic    demo            c3448bd3501d   43 years ago   315MB
+            </code></pre>
+            <p>Ça évite de produire de "nouvelles" layers si du code n'a pas changé (exemple, les libs)</p>
+        </section>
+
+        <section>
+            <h1>Les principaux builders disponibles</h1>
+            <h2>Paketo</h2>
+            <pre><code>docker container run --rm -t paketobuildpacks/builder:base ls /cnb/buildpacks</code></pre>
+            <pre><code>docker container run --rm -t paketobuildpacks/builder:tiny ls /cnb/buildpacks</code></pre>
+            <h2>Heroku</h2>
+            <pre><code>docker container run --rm -t heroku/builder:22 ls /cnb/buildpacks</code></pre>
+            <h2>Google</h2>
+            <pre><code>docker container run --rm -t gcr.io/buildpacks/builder:google-22 ls /cnb/buildpacks</code></pre>
+        </section>
+
+        <section>
+            <h1>Créer son propre builder 💡</h1>
+            <p>Choisir son image de base</p>
+            <p>Implémenter les langages manquants</p>
+        </section>
+
+        <section>
+            <h1>Les buildpacks c'est cool 😎</h1>
+            <ul>
+                <li>Un builder pour supporter tous vos langages</li>
+                <li>Génère des SBOM pour votre RSSI/RSO préféré</li>
+                <li>Gestion du cache intégrée</li>
+                <li>Facile d'utilisation</li>
+                <li>Implémente les bonnes pratiques de layering, sécurité</li>
+                <li>Rebase d'images 🤯</li>
+                <li>Reproductibilité des builds 🤯</li>
+            </ul>
+        </section>
+
+        <section>
+            <h1>Ce qui est moins cool 😥</h1>
+            <ul>
+                <li>Créer son propre builder, c'est compliqué</li>
+                <li>Le CLI <code>pack</code> utilise Docker, ou Podman</li>
+                <li>Mais y'a moyen d'exécuter un builder sans Docker</li>
+            </ul>
+        </section>
+
+        <section>
+            <h1>Le rebase d'images</h1>
+            <p>Implémenté par la plupart des builders sur la couche "distribution"</p>
+            <p>Permet de modifier les layers basses d'une image, sans avoir besoin de la reconstruire</p>
+        </section>
+
+    </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+        controls: true,
+        margin: 0.04,
+        width: 1280,
+        height: 720,
+
+        slideNumber: true,
+
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+    });
+</script>
+</body>
+</html>

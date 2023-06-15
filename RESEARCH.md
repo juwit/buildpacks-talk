@@ -1,6 +1,7 @@
 # Laissez tomber vos Dockerfile, adoptez un buildpack !
 
 # Plan détailllé
+
 * accroche -> construire une image c'est compliqué
 * comment Docker construit une image
 * c'est quoi une image docker
@@ -188,4 +189,11 @@ Comparer les sha256 des layers
 Cloud Run
 Cloud Functions
 Knative => "func build"
-mvn spring-boot:build-image
+mvn spring-boot:build-image 
+Azure Container Apps : https://learn.microsoft.com/en-us/cli/azure/containerapp?view=azure-cli-latest
+
+
+
+---
+
+Icons by Freepik https://www.flaticon.com/fr/auteurs/freepik

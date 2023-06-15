@@ -2,6 +2,14 @@
 
 styles
 
+colors
+
+#FFBE53
+#FAA259
+#F68B5E
+#F16B65
+#EF5E68
+
 color-main: #f06766
 color-secondary: #ffc152
 color-tertiary: #f58260
@@ -126,7 +134,7 @@ On ouvre des MR/PR sur les 150 projets de l'entreprise et on espère que les dev
 
 Adoptez un buildpack !
 
-[](talk-logo.svg)
+[](reveal.js/assets/talk-logo.svg)
 
 ---
 
@@ -140,7 +148,7 @@ La vision qu'on a souvent :
 
 Les layers
 
-![](assets/buildpacks-diagrams-image-layers.svg)
+![](reveal.js/assets/buildpacks-diagrams-image-layers.svg)
 
 distrib + runtime/middleware + code
 
@@ -191,16 +199,7 @@ distrib + runtime/middleware + code
 	},
 	"created": "2023-06-02T01:44:46.577735785Z",
 	"docker_version": "20.10.23",
-	"os": "linux",
-	"rootfs": {
-		"type": "layers",
-		"diff_ids": [
-			"sha256:966e94ab6e166fb358a208cfd8169d22dea352501c96700eb7f45092a2962ee6",
-			"sha256:c06103114e6ae337714908c1ee4fd815a6d6b364703cbea6050aa10bb82151ec",
-			"sha256:e9c496514aa7ec95474908ee8e0f00f1c20756740be194a097111801f77ba29b",
-			"sha256:be8cd3ceb782d42ec828a1e53b009d8f70e80c4a5ffa9912ec59349d0a761ce5"
-		]
-	}
+	"os": "linux"
 }
 ```
 
@@ -247,3 +246,137 @@ Si on est capable de créer les fichiers `tar.gz`, de calculer un digest `sha256
 C'est ce que font les buildpacks.
 
 Créer des images OCI, sans avoir besoin de Dockerfile !
+
+---
+
+# ça veut aussi dire, qu'on peut modifier une image, juste en allant modifier son manifest
+
+sans forcément devoir passer par un process de reconstruction
+
+par exemple, remplacer une ou plusieurs layers associées à des distributions ou runtime, sans devoir rebuilder, pratique pour patcher de la sécurité
+
+---
+
+# Buildpacks
+
+Conçu par Heroku en 2011 pour leur propre besoin de PaaS multi-langage.
+
+CNB (Cloud Native Buildpacks) initié en 2018, et a rejoint la CNCF (Cloud Native Computing Foundation) en 2018 en "Incubating"
+
+---
+
+Qui l'utilise en production ? Est-ce que c'est mature ?
+
+Google App Engine - Google Cloud Run - Google Cloud Functions - Azure Container Apps - Gitlab AutoDevOps - KNative - Dokku - Spring Boot (mvn spring-boot:build-image) - Riff (Netlify)
+
+---
+
+# C'est quoi un buildpack ?
+
+Plusieurs composants :
+
+* builder : une image OCI qui va contenir tous les scripts et buildpacks pour construire une application
+* stack : un couple de build image + run image (base pour les images qui seront construite)
+* les buildpacks : implémentent chacun un logique de construction pour un langage ou un runtime
+
+---
+
+Un buildpack est composé de 2 fichiers : 
+* bin/detect : indique si le buildpack doit être activé
+* bin/build : contribue à la construction d'une ou plusieurs layers
+
+---
+
+Le builder : 
+
+1. Monte le code source dans un répertoire /workspace
+2. Interroge chaque buildpack avec "detect"
+3. Exécute tous les buildpacks qui doivent être exécutés
+4. Chaque buildpack contribue une ou plusieurs layer dans /layer
+5. Les layers dans /layer sont ensuite exportées pour créer une image OCI !
+
+---
+
+Comment ça marche un builder ?
+
+C'est une image de container :D 
+
+On va avoir un répertoire /cnb pour Cloud Native Buildpacks
+Ce répertoire va contenir /lifecycle avec des binaires, et /buildpacks 
+
+
+Explication avec les schémas
+
+---
+
+En bonus
+
+* Du cache peut être chargé depuis un registry OCI (.m2/ node_modules/)
+* Les layers buildées peuvent être reproductibles
+* l'utilisateur n'est pas root
+
+
+---
+
+Démo !
+
+Construction d'une image petclinic !
+
+pack build petclinic:demo --builder paketobuildpacks/builder:base
+
+dive petclinic:demo
+
+docker image inspect petclinic:demo | bat -l json
+
+docker image inspect petclinic:demo | jq '.[].RootFS'
+
+docker image inspect rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-base | jq '.[].RootFS'
+
+
+diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image inspect rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-base | jq '.[].RootFS')
+
+---
+
+Les builds reproductibles !
+
+à partir du même code source, produit strictement le même binaire / la même image !
+/app
+C'est hyper pratique pour économiser de la place, si une layer n'a pas changé, etc
+
+Exemple avec une application Spring Boot
+
+---
+
+
+Le rebase d'images
+
+implémenté par la couche distrib, mais hyper intéressant 
+
+permet de modifier les layers inférieures d'une image, sans avoir besoin de la reconstruire en entier
+
+on met juste à jour le manifest, et on le push
+
+
+---
+
+Les builders disponibles
+
+paketo : open source, porté par la fondation cloud foundry (VMWare / Pivotal + SAP)
+google buildpacks : Google :D 
+heroku : heroku
+
+possibilité de créer son propre builder !
+
+---
+
+Les pro's
+
+* un builder pour toutes vos stacks
+* génère des BOM pour chaque layer !
+* cache intégré
+* facile d'utilisation
+* 
+
+---
+
+Les con's
