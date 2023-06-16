@@ -11,53 +11,144 @@
     <link rel="stylesheet" href="dist/theme/white-contrast.css">
 
     <!-- Theme used for syntax highlighted code -->
-    <link rel="stylesheet" href="plugin/highlight/zenburn.css">
+    <link rel="stylesheet" href="css/a11y-light.css">
+
+    <link rel="stylesheet" href="css/sunny-tech.css">
 
     <style>
-        body {
-            border-top: solid 10px #EF5E68;
+        #demo-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("/assets/teng-yuhong-qMehmIyaXvY-unsplash.jpg");
+            /*inset: 50% auto auto 50%;*/
+            /*transform: translate(-50%, -50%);*/
+        }
+        #demo-slide.hidden {
+            display: none;
+        }
+        #demo-slide {
+            display: block;
         }
 
-        i {
-            font-style: italic;
+        #demo-slide .window {
+            display: block;
+
+            position: absolute;
+            top: 6em;
+            left: 7em;
+
+            width: 90%;
+            height: 80%;
+
+            background-color: black;
+            /*box-shadow: 0 0 0.25rem #555;*/
+            /*border-radius: 0.25rem;*/
         }
 
-        .two-cols {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-          }
+        #demo-slide .logo {
+            position: absolute;
+            width: 5em;
+            height: 5em;
+            top: 2em;
+            left: 10em;
 
-        .logo-hell {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        }
-
-        .logo-hell > span {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            font-size: 2rem;
-        }
-        .logo-hell > span > img
-        {
-            max-width: 10rem;
-            padding: 0;
-            margin: 0;
         }
     </style>
+
+    <script type="application/ecmascript">
+        function showDemo(element){
+            console.log(element);
+
+            const demoSlide = document.querySelector("#demo-slide");
+            demoSlide.classList.remove("hidden");
+
+            const windowPlaceholder = demoSlide.querySelector(".window");
+
+            placeWindow("tilix", windowPlaceholder, element.nextElementSibling.innerText)
+        }
+
+        function hideDemo(){
+            const demoSlide = document.querySelector("#demo-slide");
+            demoSlide.classList.add("hidden");
+
+            hideWindow("tilix");
+        }
+
+        async function type(code){
+            await gnome("/type", {type: code})
+        }
+
+        function gnome (path, body) {
+            return fetch('http://localhost:7000' + path, {
+                mode: 'cors',
+                method: (body != null) ? 'POST' : 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: (body != null) ? JSON.stringify(body) : null,
+            }).then((r) => r.json());
+        }
+
+        async function placeWindow (window, div, code) {
+            if (window == null) {
+                return;
+            }
+
+            const rect = div.getBoundingClientRect();
+
+            const windowRect = document.body.getBoundingClientRect();
+            const ratio = 1;
+
+            const MOZINNERSCREENY = globalThis.mozInnerScreenY;
+
+            await gnome('/move-window', {
+                id: window.id,
+                x: Math.ceil(rect.x * ratio),
+                y: Math.ceil((rect.y + MOZINNERSCREENY) * ratio),
+                width: Math.ceil(rect.width * ratio),
+                height: Math.ceil(rect.height * ratio),
+                minimize: false,
+                above: true,
+            }).catch(() => null);
+
+            await type(code);
+        }
+
+        async function hideWindow (window) {
+            if (window == null) {
+                return;
+            }
+            await gnome('/hide-window', {
+                id: window.id,
+                minimize: true,
+                above: false,
+            }).catch(() => null);
+        }
+    </script>
+
 </head>
 <body>
+<div id="demo-slide" class="hidden" style="z-index: 100">
+    <img class="logo" src="assets/logo-terminal.svg" onclick="hideDemo()">
+    <div class="window"></div>
+</div>
 <div class="reveal">
+
+    <div class="sunny-tech-logo"></div>
+
+
 
     <!-- TODO theming général -->
     <!-- TODO theme de highlight -->
 
-
     <div class="slides">
 
         <section>
-            <h1>Laissez tomber vos Dockerfile, adoptez un buildpack !</h1>
+            <h1>Laissez tomber vos Dockerfile, adoptez un Buildpack !</h1>
+            <h4>Julien Wittouck 🐦 @CodeKaio</h4>
         </section>
 
         <section>
@@ -71,24 +162,33 @@
 
         <!-- TODO slide de présentation -->
         <section>
-            <h2>Exécuter une application dans un container, c'est facile</h2>
-            <h2>Un Dockerfile 🐋 et hop 🚀, en prod !</h2>
+            <h2>Exécuter une application dans un container, c'est facile.</h2>
+            <h2>Un <code>Dockerfile</code> 🐋 et hop 🚀, en prod !</h2>
         </section>
 
         <section>
-            <h2>J'écris des (mauvais) Dockerfile depuis 2015 <span class="fragment">🤮</span></h2>
+            <h2>Spoiler</h2>
+            <h2 class="fragment">Non</h2>
+        </section>
+
+        <section>
+            <h2>J'écris des (mauvais) <code>Dockerfile</code> depuis 2015 <span class="fragment">🤮</span></h2>
             <div class="two-cols">
-                <pre><code data-trim data-noescape data-line-numbers>
+                <div><pre>
+                    <aside class="right">🐋 Dockerfile</aside>
+                    <code data-trim data-noescape data-line-numbers>
     FROM node:latest
     COPY . .
     RUN npm install
     CMD ["npm", "start"]
-      </code></pre>
-                <pre><code data-trim data-noescape data-line-numbers>
+      </code></pre></div>
+                <div><pre>
+                    <aside class="right">🐋 Dockerfile</aside>
+                    <code data-trim data-noescape data-line-numbers>
     FROM openjdk:latest
     COPY . .
     CMD ["./mvnw", "spring-boot:run"]
-      </code></pre>
+      </code></pre></div>
             </div>
             <p class="fragment">Comment éviter ça sur des projets ?</p>
         </section>
@@ -98,7 +198,9 @@
             <p><a href="https://www.docker.com/blog/kickstart-your-spring-boot-application-development/">www.docker.com/blog</a>
             </p>
 
-            <pre><code data-trim data-noescape data-line-numbers="|1|5-7|9|11">
+            <pre>
+                <aside class="right">🐋 Dockerfile</aside>
+                <code data-trim data-noescape data-line-numbers="|1|5-7|9|11">
 FROM eclipse-temurin:17-jdk-focal
 
 WORKDIR /app
@@ -118,7 +220,9 @@ CMD ["./mvnw", "spring-boot:run"]
             <p><a href="https://spring.io/guides/topicals/spring-boot-docker/">spring.io/guides</a>
             </p>
 
-            <pre><code data-trim data-noescape data-line-numbers="|1,13|5-10|11|16-17|20-23|24">
+            <pre>
+                <aside class="right">🐋 Dockerfile</aside>
+                <code data-trim data-noescape data-line-numbers="|1,13|5-10|11|16-17|20-23|24">
 # build stage
 FROM eclipse-temurin:17-jdk-alpine as build
 WORKDIR /workspace/app
@@ -149,88 +253,64 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
         <section>
             <!-- TODO Style pour la balise <code> toute seule -->
             <p>Est-ce que ce <code>Dockerfile</code> était parfait ?</p>
-            <p>Est-ce qu'on attend d'un développeur l'écriture d'un tel <code>Dockerfile</code> ?</p>
+            <p>Est-ce qu'on attend d'un·e développeur·euse l'écriture d'un tel <code>Dockerfile</code> ?</p>
             <!-- TODO Code JS qui entoure certains mots de <code> ou de <i> -->
         </section>
 
         <section>
-            <h2>Comment font la plupart des développeurs qui doivent écrire un Dockerfile ?</h2>
+            <h2>Écrire un <code>🐋 Dockerfile</code></h2>
             <ul>
-                <li>Au pire : Stackoverflow, ou un tutoriel random</li>
-                <li>Bof : le Dockerfile de Spring Boot, ou NodeJs, sans le comprendre</li>
-                <li>Mieux : ils sont experts Docker, ou un Ops écrit le Dockerfile avec eux</li>
+                <li>Image de base, Runtime / Version (<code>FROM</code>)</li>
+                <li>Optimiser les layers (<code>RUN</code>)</li>
+                <li>Script de démarrage (<code>ENTRYPOINT</code>)</li>
+                <li>Configuration (<code>ENV</code>)</li>
+                <li>
+                    Sécurité
+                    <ul>
+                        <li>User non-root (<code>USER</code>)</li>
+                        <li>Versions des packages / runtime à jour</li>
+                        <li>Pas de code source dans l'image finale</li>
+                        <li>Pouvoir patcher les images en cas de nouvelle faille</li>
+                        <li>Pas de secrets</li>
+                    </ul>
+                </li>
             </ul>
         </section>
 
         <section>
-            <h2>Aucun être humain ne devrait écrire des Dockerfile, ou des tonnes de YAML</h2>
+            <h2>Comment font les développeurs qui doivent écrire un <code>🐋 Dockerfile</code> ?</h2>
+            <ul>
+                <li>🤮 Au pire : Stackoverflow, ChatGPT, ou un tutoriel random</li>
+                <li>🤢 Bof : le Dockerfile de Spring Boot, ou NodeJs</li>
+                <li>🤓 Mieux : ils sont experts Docker, ou un Ops écrit le <code>Dockerfile</code> avec eux</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Aucun être humain ne devrait écrire des <code>🐋 Dockerfile</code>, ou des tonnes de <code>🥴 YAML</code></h2>
         </section>
 
         <section>
             <h2>Comment font les entreprises ?</h2>
             <p>Une grosse DSI, avec plein de projets sympas</p>
-            <p>Chaque projet a son propre Dockerfile, forcément différent des autres</p>
-            <h3>Bienvenue en enfer</h3>
+            <p>Chaque projet a son propre <code>Dockerfile</code>, forcément différent des autres</p>
+            <h3>Bienvenue en enfer 👿</h3>
             <p>Ouvrir des change-request sur les 150+ projets de l'entreprise pour mettre à jour les Dockerfile</p>
         </section>
 
-        <section>
-            <h2>Ce qu'on demandait au devs avant 2015 : </h2>
-            <ul>
-                <li>Une application qui marche, sur un runtime installé par les Ops</li>
-                <li>Configurable (fichiers ou variables d'environnement)</li>
-                <li>Bonnes pratiques de code sécurisé (Injections/OWASP...)</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>Ce qu'on demande au devs : </h2>
-            <ul>
-                <li>Une application qui marche, sur un runtime embarqué</li>
-            </ul>
-            <ul>
-                <li>
-                    Une application qui marche
-                    <ul>
-                        <li>Paramétrable (variables d'environnement)</li>
-                        <li>Quel runtime ?</li>
-                        <li>JDK ? JRE ? GraalVM ? Compilation native ?</li>
-                        <li>NodeJS ? Deno ?</li>
-                        <li>Nginx ? HTTPD ?</li>
-                    </ul>
-                </li>
-                <li>
-                    Sécurité
-                    <ul>
-                        <li>User non-root</li>
-                        <li>Versions des packages / runtime à jour</li>
-                        <li>Pas de code source dans l'image finale</li>
-                        <li>Pouvoir patcher les images en cas de nouvelle faille</li>
-                    </ul>
-                </li>
-                <li>
-                    Optimisation
-                    <ul>
-                        <li>Layers minimales</li>
-                        <li>Distribution ou Distroless</li>
-                    </ul>
-                </li>
-            </ul>
-        </section>
-
-        <section data-background-image="assets/thinking.jpg" data-background-opacity="0.5">
+        <section data-state="no-logo" data-background-image="assets/thinking.jpg" data-background-opacity="0.5">
             <h1>L'instant philosophie</h1>
             <p>DevOps, c'est les Devs qui font de l'Ops et les Ops qui font du Dev ?</p>
             <p>DevOps, c'est no-Ops ?</p>
         </section>
 
         <section>
-            <h1>Mais au fait, c'est quoi une image <s>Docker</s> OCI ?</h1>
+            <h1>Mais au fait, c'est quoi une image <span class="fragment strike">🐋 Docker</span> <span class="fragment custom not-present">OCI</span> ?</h1>
 
-            <p>On parle maintenant d'image OCI (Open Container Initiative)</p>
-
-            Normalisé : <a href="https://github.com/opencontainers/image-spec/blob/main/spec.md">https://github.com/opencontainers/image-spec/blob/main/spec.md</a>
-
+            <p class="fragment">
+                On parle maintenant d'image OCI (Open Container Initiative)
+                Normalisé : <a href="https://github.com/opencontainers/image-spec/blob/main/spec.md">github.com/opencontainers/image-spec</a>
+            </p>
         </section>
         <section>
             <h2>La vision qu'on a souvent :</h2>
@@ -244,7 +324,9 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
         <section>
             <h2>En fait, c'est surtout un bout de JSON qui référence des TAR.GZ</h2>
             <p>On appelle ça un <i>Manifest</i></p>
-            <pre><code data-trim data-noescape data-line-numbers="|4-25|26-30">
+            <pre>
+                <aside class="right">📦 manifest.json</aside>
+                <code data-trim data-noescape data-line-numbers="|4-25|26-30">
 {
 	"schemaVersion": 2,
 	"mediaType": "application/vnd.docker.distribution.manifest.v2+json",
@@ -292,7 +374,9 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
         </section>
         <section>
             <p>Configuration de l'image <code>eclipse-temurin:17.0.7_7-jdk</code></p>
-            <pre><code data-trim data-noescape data-line-numbers="|2|13-20|6|29-32|21-23">
+            <pre>
+                <aside class="right">📦 config.json</aside>
+                <code data-trim data-noescape data-line-numbers="|2|13-20|6|29-32|21-23">
 {
 	"architecture": "amd64",
 	"config": {
@@ -358,7 +442,7 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
         </section>
 
 
-        <section data-background-image="assets/thinking.jpg" data-background-opacity="0.5">
+        <section data-state="no-logo" data-background-image="assets/thinking.jpg" data-background-opacity="0.5">
             <h1>L'instant philosophie</h1>
             <p>ça veut aussi dire, qu'on peut modifier une image, juste en allant modifier son manifest</p>
             <img src="assets/buildpacks-diagrams-image-layers-rebase.svg"/>
@@ -476,38 +560,57 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
         <section>
             <h1>Outillage</h1>
             <p>Le CLI <code>pack</code> permet d'exécuter des builders, pour construire des images.</p>
-            <pre><code data-trim data-noescape class="language-bash">
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+# installation du CLI avec apt
 sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
 sudo apt-get update
 sudo apt-get install pack-cli
             </code></pre>
-            <pre><code data-trim data-noescape class="language-bash">
-                pack --help
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    # premiers secours
+                    pack --help
             </code></pre>
         </section>
         <section>
             <h1>Démo !</h1>
-            <pre><code data-trim data-noescape class="language-bash">
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
 # construction d'une image
 pack build petclinic:demo --builder paketobuildpacks/builder:base
             </code></pre>
 
-            <pre><code data-trim data-noescape class="language-bash">
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
 # parcours des layers construite avec dive
 dive petclinic:demo
             </code></pre>
 
-            <pre><code data-trim data-noescape class="language-bash">
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
 # inspection de l'image
 docker image inspect petclinic:demo | bat -l json
             </code></pre>
+        </section>
 
-            <pre><code data-trim data-noescape class="language-bash">
+        <section>
+            <h2>Reproductibilité ? 🤔</h2>
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
 # pull d'une image construite précédemment
 docker image pull rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-base
             </code></pre>
 
-            <pre><code data-trim data-noescape class="language-bash">
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
 # comparaison des layers
 docker image inspect petclinic:demo | jq '.[].RootFS'
 docker image inspect rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-base | jq '.[].RootFS'
@@ -518,30 +621,45 @@ diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image 
 
         <section>
             <h1>L'image produite</h1>
-            <!-- TODO schéma à gauche -->
-            <img src="assets/buildpacks-diagrams-image-layers-buildpacks.svg"/>
-            <p>Respecte les bonnes pratiques de layering de Spring Boot</p>
-            <p>Est plus légère que celle proposée par Spring Boot</p>
-            <pre><code>
+            <div class="two-cols">
+                <img src="assets/buildpacks-diagrams-image-layers-buildpacks.svg"/>
+                <div>
+                    <p>Respecte les bonnes pratiques de layering de Spring Boot</p>
+                    <p>Est plus légère que celle proposée par Spring Boot</p>
+                    <pre>
+                <aside class="left">> bash</aside>
+                <code>
 REPOSITORY   TAG             IMAGE ID       CREATED         SIZE
 petclinic    dockerfile      3c06306a5640   7 minutes ago   409MB
 petclinic    demo            c3448bd3501d   43 years ago    315MB
             </code></pre>
-            <p>Chaque buildpack contribue à la construction d'un SBoM dans une layer dédiée (Software Bill Of Material)</p>
+                </div>
+            </div>
+
         </section>
 
         <section>
             <h1>Une image produite pour une appli NodeJS</h1>
             <img src="assets/buildpacks-diagrams-image-layers-buildpacks-node.svg"/>
-            <p>Layer <code>node_modules</code></p>
+        </section>
+
+        <section>
+            <h1>SBoM</h1>
+            <p>Software Bill of Materials</p>
+            <p>Chaque buildpack contribue à la construction d'un SBoM dans une layer dédiée (Software Bill Of Material)</p>
+            <p>C'est vos RSSI et vos RSO qui vont être contents 😃</p>
         </section>
 
         <section>
             <h1>Reproductibilité des builds</h1>
             <p>À partir du même code source, produit strictement le même binaire / la même image, avec le même digest sha256 !</p>
             <p>Nécessite de mettre à <code>"0"</code> les dates des fichiers.</p>
-            <pre><code class="language-json">"Created": "1980-01-01T00:00:01Z"</code></pre>
-            <pre><code data-trim data-noescape class="language-bash">
+            <pre>
+                <aside class="right">{} JSON</aside>
+                <code class="language-json">"Created": "1980-01-01T00:00:01Z"</code></pre>
+            <pre>
+                <aside class="right">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
 REPOSITORY   TAG             IMAGE ID       CREATED        SIZE
 petclinic    demo            c3448bd3501d   43 years ago   315MB
             </code></pre>
@@ -551,12 +669,33 @@ petclinic    demo            c3448bd3501d   43 years ago   315MB
         <section>
             <h1>Les principaux builders disponibles</h1>
             <h2>Paketo</h2>
-            <pre><code>docker container run --rm -t paketobuildpacks/builder:base ls /cnb/buildpacks</code></pre>
-            <pre><code>docker container run --rm -t paketobuildpacks/builder:tiny ls /cnb/buildpacks</code></pre>
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape>
+                    # paketo-base
+                    docker container run --rm -t paketobuildpacks/builder:base ls /cnb/buildpacks
+                </code>
+            </pre>
+            <pre><aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape>
+                # paketo-tiny construit des image distroless
+                docker container run --rm -t paketobuildpacks/builder:tiny ls /cnb/buildpacks
+            </code></pre>
+        </section>
+        <section>
+            <h1>Les principaux builders disponibles</h1>
             <h2>Heroku</h2>
-            <pre><code>docker container run --rm -t heroku/builder:22 ls /cnb/buildpacks</code></pre>
+            <pre><aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape>
+                # heroku
+                docker container run --rm -t heroku/builder:22 ls /cnb/buildpacks
+                </code>
+            </pre>
             <h2>Google</h2>
-            <pre><code>docker container run --rm -t gcr.io/buildpacks/builder:google-22 ls /cnb/buildpacks</code></pre>
+            <pre><aside class="right" onclick="showDemo(this)">> bash</aside><code data-trim data-noescape>
+                # google
+                docker container run --rm -t gcr.io/buildpacks/builder:google-22 ls /cnb/buildpacks
+            </code></pre>
         </section>
 
         <section>

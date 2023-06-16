@@ -1,0 +1,65 @@
+@font-face {
+    font-family: 'Nokio';
+    src: url('NokioLight.eot');
+    src: local('Nokio Light'), local('NokioLight'),
+        url('NokioLight.eot?#iefix') format('embedded-opentype'),
+        url('NokioLight.woff2') format('woff2'),
+        url('NokioLight.woff') format('woff'),
+        url('NokioLight.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nokio';
+    src: url('NokioBold.eot');
+    src: local('Nokio Bold'), local('NokioBold'),
+        url('NokioBold.eot?#iefix') format('embedded-opentype'),
+        url('NokioBold.woff2') format('woff2'),
+        url('NokioBold.woff') format('woff'),
+        url('NokioBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nokio';
+    src: url('NokioMedium.eot');
+    src: local('Nokio Medium'), local('NokioMedium'),
+        url('NokioMedium.eot?#iefix') format('embedded-opentype'),
+        url('NokioMedium.woff2') format('woff2'),
+        url('NokioMedium.woff') format('woff'),
+        url('NokioMedium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nokio';
+    src: url('NokioRegular.eot');
+    src: local('Nokio'), local('NokioRegular'),
+        url('NokioRegular.eot?#iefix') format('embedded-opentype'),
+        url('NokioRegular.woff2') format('woff2'),
+        url('NokioRegular.woff') format('woff'),
+        url('NokioRegular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nokio Extra';
+    src: url('NokioExtraLight.eot');
+    src: local('Nokio Extra Light'), local('NokioExtraLight'),
+        url('NokioExtraLight.eot?#iefix') format('embedded-opentype'),
+        url('NokioExtraLight.woff2') format('woff2'),
+        url('NokioExtraLight.woff') format('woff'),
+        url('NokioExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
