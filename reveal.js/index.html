@@ -100,16 +100,18 @@
             const rect = div.getBoundingClientRect();
 
             const windowRect = document.body.getBoundingClientRect();
+            
+            // ratio à 2 si affichage à 200%
             const ratio = 1;
 
             const MOZINNERSCREENY = globalThis.mozInnerScreenY;
 
             await gnome('/move-window', {
                 id: window.id,
-                x: Math.ceil(rect.x * ratio),
-                y: Math.ceil((rect.y + MOZINNERSCREENY) * ratio),
-                width: Math.ceil(rect.width * ratio),
-                height: Math.ceil(rect.height * ratio),
+                x: Math.ceil(rect.x * ratio) - 40,
+                y: Math.ceil((rect.y + MOZINNERSCREENY) * ratio) - 40,
+                width: Math.ceil(rect.width * ratio) + 80,
+                height: Math.ceil(rect.height * ratio) + 80,
                 minimize: false,
                 above: true,
             }).catch(() => null);
