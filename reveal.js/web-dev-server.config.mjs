@@ -9,8 +9,15 @@ app.use(express.json());
 import cors from 'cors';
 app.use(cors());
 
-function move(id, position) {
+let lastKnownPosition;
 
+function move(id, position) {
+    if(position) {
+        lastKnownPosition = position;
+    }
+    else {
+        position = lastKnownPosition;
+    }
     // const x = Math.ceil((SCREEN.w - TERM.w) / 2) + SCREEN.x;
     // const y = Math.ceil((SCREEN.h - TERM.h) / 2) + SCREEN.y;
 
@@ -22,13 +29,14 @@ function move(id, position) {
     const {x,y,width, height} = position;
     console.log(position);
 
-    execSync(`wmctrl -ir ${id} -e 0,${x},${y},${width},${height}`);
+    console.log(`wmctrl -ir ${id} -e 0,${1920+x},${y},${width},${height}`)
+
+    execSync(`wmctrl -ir ${id} -e 0,${1920+x},${y},${width},${height}`);
     execSync(`wmctrl -ir ${id} -b remove,below`);
     execSync(`wmctrl -ir ${id} -b add,above`);
 }
 
-app.post('/move-window', (req, res) => {
-    console.log('move window')
+function getTerminalRef(){
     const list = execSync('wmctrl -l', { encoding: 'utf8' });
     const windows = list
         .split('\n')
@@ -37,7 +45,19 @@ app.post('/move-window', (req, res) => {
             const [id, index, hostname, ...windowName] = line.split(/ +/);
             return { id, name: windowName.join(' ') };
         });
-    const terminal = windows.find(({ name }) => name.startsWith('Tilix'));
+    return windows.find(({ name }) => name.startsWith('Tilix'));
+}
+
+app.post('/move-window', async (req, res) => {
+    console.log('move window')
+
+    let terminal = getTerminalRef();
+
+    if(! terminal){
+        await startTerminal();
+        terminal = getTerminalRef();
+    }
+
     move(terminal.id, req.body);
 
     const windowId = execSync(`xdotool search --onlyvisible --limit 1 --class "Tilix"`);
@@ -57,13 +77,28 @@ app.post('/hide-window', (req, res) => {
             return { id, name: windowName.join(' ') };
         });
     const terminal = windows.find(({ name }) => name.startsWith('Tilix'));
-    execSync(`wmctrl -ir ${terminal.id} -b add,below`);
+    execSync(`wmctrl -ir ${terminal.
+        
+        id} -b add,below`);
 
     const windowId = execSync(`xdotool search --onlyvisible --limit 1 --class "Firefox"`);
     execSync(`xdotool windowactivate ${windowId}`);
     res.sendStatus(200);
 });
 
+function zoomIn(){
+    const windowId = execSync(`xdotool search --onlyvisible --limit 1 --class "Tilix"`);
+    execSync(`xdotool windowactivate ${windowId}`);
+    execSync(`xdotool key ctrl+plus`);
+    execSync(`xdotool key ctrl+plus`);
+    execSync(`xdotool key ctrl+plus`);
+    execSync(`xdotool key ctrl+plus`);
+}
+function typefast(command){
+    const windowId = execSync(`xdotool search --onlyvisible --limit 1 --class "Tilix"`);
+    execSync(`xdotool windowactivate ${windowId}`);
+    execSync(`setxkbmap fr && xdotool type "${command}"`);
+}
 function type(command){
     console.log('type : ' + command);
     const windowId = execSync(`xdotool search --onlyvisible --limit 1 --class "Tilix"`);
@@ -80,16 +115,27 @@ app.listen(7000, () => {
     console.log(`helloworld: listening on port ${7000}`);
 });
 
+let terminalProcess;
+async function startTerminal(){
+    terminalProcess = spawn('tilix');
+    await setTimeout(1500);
 
-const terminalProcess = spawn('tilix');
-await setTimeout(1500);
+    // clear history
+    typefast(`
+PROMPT='%F{blue}%ssunny-tech%f $ '
+history -p
+cd ~/workspaces/sunny-tech/buildpacks-talk/spring-petclinic
+clear
+`);
 
-type("cd ~/workspaces/sunny-tech/buildpacks-talk/spring-petclinic\n");
-type("clear\n");
+    zoomIn();
 
-console.log({
-    terminal: terminalProcess.pid,
-});
+    console.log({
+        terminal: terminalProcess.pid,
+    });
+}
+
+await startTerminal();
 
 process.on('SIGINT', function () {
     try {

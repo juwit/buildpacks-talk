@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>reveal.js</title>
+    <title>Laissez tomber vos Dockerfile - Adoptez un buildpack</title>
 
     <link rel="stylesheet" href="dist/reset.css">
     <link rel="stylesheet" href="dist/reveal.css">
@@ -16,6 +16,29 @@
     <link rel="stylesheet" href="css/sunny-tech.css">
 
     <style>
+        .img-inline {
+            height: 1em;
+            vertical-align: middle;
+        }
+
+        /** section pages **/
+        .section-title section {
+        }
+
+        .section-title h1 {
+            background-color: white;
+            position: absolute;
+            bottom: 1rem;
+        }
+
+        /** twitter styles */
+        .center-tweets{
+            display: flex;
+            align-content: center;
+            justify-content: center;
+        }
+
+
         #demo-slide {
             position: absolute;
             top: 0;
@@ -67,7 +90,12 @@
 
             const windowPlaceholder = demoSlide.querySelector(".window");
 
-            placeWindow("tilix", windowPlaceholder, element.nextElementSibling.innerText)
+            if(element){
+                placeWindow("tilix", windowPlaceholder, element.nextElementSibling.innerText)
+            }
+            else{
+                placeWindow("tilix", windowPlaceholder, "")
+            }
         }
 
         function hideDemo(){
@@ -98,9 +126,8 @@
             }
 
             const rect = div.getBoundingClientRect();
+            console.log(rect);
 
-            const windowRect = document.body.getBoundingClientRect();
-            
             // ratio à 2 si affichage à 200%
             const ratio = 1;
 
@@ -141,16 +168,11 @@
 
     <div class="sunny-tech-logo"></div>
 
-
-
-    <!-- TODO theming général -->
-    <!-- TODO theme de highlight -->
-
     <div class="slides">
 
         <section>
             <h1>Laissez tomber vos Dockerfile, adoptez un Buildpack !</h1>
-            <h4>Julien Wittouck 🐦 @CodeKaio</h4>
+            <h2>Julien Wittouck - <img style="height: 1em; vertical-align: middle;" src="assets/twitter-logo.png"/> @CodeKaio</h2>
         </section>
 
         <section>
@@ -158,23 +180,21 @@
             <ul>
                 <li>Vous êtes un·e Dev 🙋‍♀️</li>
                 <li>Vous être un·e Ops 🙋‍♂️</li>
-                <li>Vous faites joujou avec Docker 🐳</li>
+                <li>Vous faites souvent joujou avec Docker 🐳</li>
             </ul>
         </section>
 
-        <!-- TODO slide de présentation -->
         <section>
             <h2>Exécuter une application dans un container, c'est facile.</h2>
             <h2>Un <code>Dockerfile</code> 🐋 et hop 🚀, en prod !</h2>
         </section>
 
         <section>
-            <h2>Spoiler</h2>
-            <h2 class="fragment">Non</h2>
+            <h2>Non</h2>
         </section>
 
         <section>
-            <h2>J'écris des (mauvais) <code>Dockerfile</code> depuis 2015 <span class="fragment">🤮</span></h2>
+            <h2>J'écris des (mauvais 🤮) <code>Dockerfile</code> depuis 2015</span></h2>
             <div class="two-cols">
                 <div><pre>
                     <aside class="right">🐋 Dockerfile</aside>
@@ -192,7 +212,52 @@
     CMD ["./mvnw", "spring-boot:run"]
       </code></pre></div>
             </div>
-            <p class="fragment">Comment éviter ça sur des projets ?</p>
+<!--            <p class="fragment">Comment éviter ça sur des projets ?</p>-->
+        </section>
+
+        <section>
+            <div class="two-cols">
+                <div>
+                    <h1 style="text-align: start">
+                        Salut 👋
+                        <br>
+                        Moi c’est Julien</h1>
+                    <h3 style="text-align: start">
+                        Freelance @CodeKaio<br/>
+                        Associé @Ekité<br/>
+                        Teacher @univ-lille<br/>
+                        <br/>
+                        👶 Speaker (DevFest Lille - Sunny Tech)<br/>
+                        🔎 Reviewer Cloud Nord<br/>
+                    </h3>
+                </div>
+                <div class="r-stack">
+                    <img class="" src="assets/profile-picture.png"/>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h1>Allez, on embarque !</h1>
+            <video style="height: 800px;" data-autoplay muted loop src="assets/pirat-dogs-trimmed.mp4"></video>
+        </section>
+
+        <section data-state="section-title no-logo" data-background-image="assets/venti-views-1cqIcrWFQBI-unsplash.jpg">
+            <h1>Dockerfiles</h1>
+            <aside class="notes">
+                2 minutes
+
+                On va commencer par regarder quelques Dockerfile, et se poser la question, comment docker construit une image?
+            </aside>
+        </section>
+
+        <section>
+            <h2>Comment Docker construit une image ?</h2>
+            <ul>
+                <li>"Exécute" le <code>Dockerfile</code></li>
+                <li>Dans des containers séparés</li>
+                <li>"SNAPSHOT" le filesystem à chaque étape pour créer les layers</li>
+            </ul>
         </section>
 
         <section>
@@ -248,15 +313,27 @@ ARG DEPENDENCY=/workspace/app/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
-ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
+ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
   </code></pre>
         </section>
 
-        <section>
-            <!-- TODO Style pour la balise <code> toute seule -->
+        <section data-state="no-logo" data-background-image="assets/thinking.jpg" data-background-opacity="0.5">
+            <h1>L'instant philosophie</h1>
             <p>Est-ce que ce <code>Dockerfile</code> était parfait ?</p>
             <p>Est-ce qu'on attend d'un·e développeur·euse l'écriture d'un tel <code>Dockerfile</code> ?</p>
-            <!-- TODO Code JS qui entoure certains mots de <code> ou de <i> -->
+        </section>
+
+        <section>
+            <h1>Quel est le problème avec les <code>Dockerfile</code> ?</h1>
+        </section>
+
+        <section>
+            <p>Ce que pense Darren Shepherd</p>
+            <p>(former @Rancher_Labs, k3s creator)</p>
+            <div class="center-tweets">
+                <blockquote class="twitter-tweet" data-dnt="true"><p lang="en" dir="ltr">So issues I have<br><br>1. Caching. I&#39;ve been told this is hard. I believe there is stupider and more effective ways to (not) do it<br>2. Layers are soooo 2018<br>3. Multi stage is cool and all, but you really only need two stages (build env, run env)<br>4. COPY is kinda pointless. <a href="https://t.co/CcuB2Axd3G">https://t.co/CcuB2Axd3G</a></p>&mdash; Darren Shepherd (@ibuildthecloud) <a href="https://twitter.com/ibuildthecloud/status/1673593464733470721?ref_src=twsrc%5Etfw">June 27, 2023</a></blockquote>
+                <blockquote class="twitter-tweet"><p lang="en" dir="ltr">You really can&#39;t build a properly good docker image without multi stage because you don&#39;t want your compiler in the final image. I think a better UX can be built assuming you basically always want to stages: build and run.</p>&mdash; Darren Shepherd (@ibuildthecloud) <a href="https://twitter.com/ibuildthecloud/status/1673595763522416645?ref_src=twsrc%5Etfw">June 27, 2023</a></blockquote>
+            </div>
         </section>
 
         <section>
@@ -288,29 +365,41 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
             </ul>
         </section>
 
-        <section>
+        <section data-visibility="hidden">
             <h2>Aucun être humain ne devrait écrire des <code>🐋 Dockerfile</code>, ou des tonnes de <code>🥴 YAML</code></h2>
         </section>
 
         <section>
-            <h2>Comment font les entreprises ?</h2>
-            <p>Une grosse DSI, avec plein de projets sympas</p>
+            <h2>Et c'est pire en entreprise</h2>
             <p>Chaque projet a son propre <code>Dockerfile</code>, forcément différent des autres</p>
             <h3>Bienvenue en enfer 👿</h3>
-            <p>Ouvrir des change-request sur les 150+ projets de l'entreprise pour mettre à jour les Dockerfile</p>
+            <p>Quand les normes évoluent, ouvrir des change-request sur tous les projets de l'entreprise pour mettre à jour les Dockerfile</p>
         </section>
 
+        <!--
         <section data-state="no-logo" data-background-image="assets/thinking.jpg" data-background-opacity="0.5">
             <h1>L'instant philosophie</h1>
             <p>DevOps, c'est les Devs qui font de l'Ops et les Ops qui font du Dev ?</p>
             <p>DevOps, c'est no-Ops ?</p>
         </section>
+        -->
+        <section data-state="section-title no-logo" data-background-image="assets/venti-views-1cqIcrWFQBI-unsplash.jpg">
+            <h1>Les images Docker</h1>
+            <aside class="notes">
+                2 minutes
+
+                On va commencer par regarder quelques Dockerfile, et se poser la question, comment docker construit une image?
+            </aside>
+        </section>
+
 
         <section>
-            <h1>Mais au fait, c'est quoi une image <span class="fragment strike">🐋 Docker</span> <span class="fragment custom not-present">OCI</span> ?</h1>
+            <h1>Images <span class="fragment strike">🐋 Docker</span> <span class="fragment custom not-present">OCI</span> ?</h1>
 
+            <img class="fragment" style="width: 50%;" src="assets/OCI-logo.svg">
+            
             <p class="fragment">
-                On parle maintenant d'image OCI (Open Container Initiative)
+                On parle d'image OCI depuis 2015 (Open Container Initiative)
                 Normalisé : <a href="https://github.com/opencontainers/image-spec/blob/main/spec.md">github.com/opencontainers/image-spec</a>
             </p>
         </section>
@@ -318,16 +407,14 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
             <h2>La vision qu'on a souvent :</h2>
 
             <p>Les layers :</p>
-
             <img src="assets/buildpacks-diagrams-image-layers.svg"/>
 
             <p>distrib + runtime/middleware + code</p>
         </section>
         <section>
-            <h2>En fait, c'est surtout un bout de JSON qui référence des TAR.GZ</h2>
-            <p>On appelle ça un <i>Manifest</i></p>
+            <h2><code>JSON</code> + <code>tar.gz</code> = 💙</h2>
             <pre>
-                <aside class="right">📦 manifest.json</aside>
+                <aside class="right">✈️ manifest.json</aside>
                 <code data-trim data-noescape data-line-numbers="|4-25|26-30">
 {
 	"schemaVersion": 2,
@@ -361,10 +448,11 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
 	}
 }
             </code></pre>
+            <p>On appelle ça un <i>Manifest</i> d'image</p>
 
         </section>
         <section>
-            <h2>La configuration aussi fait partie de l'image OCI !</h2>
+            <h2>La configuration aussi fait partie de l'image OCI <img class="img-inline" src="assets/oci-logo-small.png" /> !</h2>
             <ul>
                 <li>architecture / OS</li>
                 <li>variables d'environnements</li>
@@ -375,7 +463,7 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
             </ul>
         </section>
         <section>
-            <p>Configuration de l'image <code>eclipse-temurin:17.0.7_7-jdk</code></p>
+            <p><code>eclipse-temurin:17.0.7_7-jdk</code></p>
             <pre>
                 <aside class="right">📦 config.json</aside>
                 <code data-trim data-noescape data-line-numbers="|2|13-20|6|29-32|21-23">
@@ -428,26 +516,51 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
   </code></pre>
         </section>
 
+        <section data-state="no-logo" data-background-image="assets/thinking.jpg" data-background-opacity="0.5">
+            <h1>L'instant philosophie</h1>
+            <blockquote>
+                Heureusement qu'ils n'ont pas choisi YAML
+            </blockquote>
+        </section>
+
         <section>
-            <h2>Une image OCI</h2>
+            <h3><code>docker image inspect</code> 🔍</h3>
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    docker image inspect eclipse-temurin:17.0.7_7-jdk | bat -l json
+                </code>
+            </pre>
+
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    # on parcours une image avec dive !
+                    dive petclinic:dockerfile
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h2>Une image OCI <img class="img-inline" src="assets/oci-logo-small.png" /> </h2>
             <ul>
                 <li>Des fichiers <code>tar.gz</code></li>
                 <li>Chaque fichier a un digest <code>sha256</code></li>
-                <li>De la configuration au format JSON</li>
+                <li>De la configuration au format <code>JSON</code></li>
             </ul>
         </section>
 
         <section>
+            <!-- TODO illustration -->
             <h2>Et si ?</h2>
             <p>On pouvait générer tout ça ?</p>
-            <p>On pourrait créer des images OCI, sans avoir besoin de Docker ou d'un Dockerfile !</p>
+            <p>On pourrait créer des images OCI, sans avoir besoin de 🐋&nbsp;Docker ou d'un <code>Dockerfile</code> !</p>
         </section>
-
 
         <section data-state="no-logo" data-background-image="assets/thinking.jpg" data-background-opacity="0.5">
             <h1>L'instant philosophie</h1>
             <p>ça veut aussi dire, qu'on peut modifier une image, juste en allant modifier son manifest</p>
-            <img src="assets/buildpacks-diagrams-image-layers-rebase.svg"/>
+<!--            <img src="assets/buildpacks-diagrams-image-layers-rebase.svg"/>-->
             <aside class="notes">
                 <p>sans forcément devoir passer par un process de reconstruction</p>
                 <p>par exemple, remplacer une ou plusieurs layers associées à des distributions ou runtime, sans devoir rebuilder, pratique pour patcher de la sécurité</p>
@@ -455,21 +568,200 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
         </section>
 
 
-        <section>
-            <h1>Adoptez un buildpack !</h1>
-            <img src="assets/talk-logo.svg"/>
+
+        <section data-state="section-title no-logo" data-background-image="assets/venti-views-1cqIcrWFQBI-unsplash.jpg">
+            <h1>Les buildpacks</h1>
+            <aside class="notes">
+                15 minutes
+
+                On va regarder comment ça fonctionne et tester ça
+            </aside>
+        </section>
+
+        <section data-state="">
+            <img style="max-width: 50%;"  src="assets/buildpacks-logo.png"/>
         </section>
 
         <section>
-            <h1>Les buildpacks, génèrent des images Docker, sans avoir besoin de Dockerfile</h1>
-            <p>On décharge les développeurs de savoir implémenter toutes les bonnes pratiques Docker</p>
+            <img src="assets/what.svg"/>
         </section>
+
+<!--        <section>-->
+<!--            <h1>Les buildpacks, génèrent des images Docker, sans avoir besoin de Dockerfile</h1>-->
+<!--            <p>On décharge les développeurs de savoir implémenter toutes les bonnes pratiques Docker</p>-->
+<!--        </section>-->
 
         <section>
             <h1>Buildpacks</h1>
-            <p>Conçu par Heroku en <u>2011</u> pour leur propre besoin de PaaS multi-langage.</p>
-            <p>Le concept est plus vieux que Docker (2013)</p>
-            <p>CNB (Cloud Native Buildpacks) initié en 2018, et a rejoint la CNCF (Cloud Native Computing Foundation) en 2018 en "Incubating".</p>
+            <!-- TODO Faire une timeline en SVG -->
+            <ul>
+                <li>Concept par Heroku en <b>2011</b> pour leur propre besoin de PaaS multi-langage.</li>
+                <li>CNB (Cloud Native Buildpacks) initié en <b>2018</b>, et a rejoint la CNCF (Cloud Native Computing Foundation) en 2018 en "Incubating".</li>
+            </ul>
+            <aside class="notes">Le concept est plus vieux que Docker (2013)</aside>
+        </section>
+
+        <section>
+            <h2>Comment ça fonctionne ?</h2>
+            <img style="max-width: 80%" src="assets/builder.svg">
+            <aside class="notes"><ul>
+                <li>builder : une image OCI qui va contenir tous les scripts et buildpacks pour construire une application</li>
+                <li>les buildpacks : implémentent chacun une logique de construction pour un langage ou un runtime</li>
+            </ul></aside>
+        </section>
+
+        <section>
+            <h2>builder</h2>
+            <p>construit une image</p>
+            <h2>buildpack</h2>
+            <p>contribue à une ou plusieurs layers dans la construction</p>
+        </section>
+
+        <section>
+            <h2>Un buildpack est composé de 2 binaires&nbsp;:</h2>
+            <ul>
+                <li><code>/bin/detect</code> : indique si le buildpack doit être activé</li>
+                <li><code>/bin/build</code> : contribue à la construction d'une ou plusieurs layers</li>
+            </ul>
+            <aside class="notes">
+                <code>/bin/detect</code> va regarder le code source, et dire s'il sera utilisé.
+            </aside>
+        </section>
+        <section>
+            <h2>Le builder contient des scripts <code>lifecycle</code> :</h2>
+            <ol>
+                <li>Code source dans un répertoire <code>/workspace</code></li>
+                <li>Interroge chaque buildpack avec <code>/bin/detect</code></li>
+                <li>Exécute tous les buildpacks qui doivent être exécutés</li>
+                <li>Chaque buildpack contribue une ou plusieurs layers dans <code>/layer</code></li>
+                <li>Les layers dans <code>/layer</code> sont exportées pour créer une image OCI !</li>
+            </ol>
+        </section>
+        <section>
+            <div class="r-stack">
+                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-1.svg"/>
+                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-2.svg"/>
+                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-3.svg"/>
+                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-4.svg"/>
+                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-5.svg"/>
+                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-6.svg"/>
+            </div>
+        </section>
+        <section>
+            <h2>Mais aussi</h2>
+            <ul>
+                <li>Le builder peut charger du cache depuis un registry OCI  (<code>.m2/</code>, <code>node_modules/</code>, ...)</li>
+                <li>Les layers peuvent être reproductibles</li>
+                <li>Le builder ne s'exécute pas en <code>root</code></li>
+                <li>Le builder est une image OCI ! </li>
+            </ul>
+        </section>
+        <section>
+            <h1>Outillage</h1>
+            <p>Le CLI <code>pack</code> permet d'exécuter des builders, pour construire des images.</p>
+            <pre>
+                <aside class="right">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+# installation du CLI avec apt
+sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
+sudo apt-get update
+sudo apt-get install pack-cli
+            </code></pre>
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    # premiers secours
+                    pack --help
+            </code></pre>
+
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    # construction d'une image OCI !
+                    pack build ma-jolie-image --builder paketobuildpacks/builder:base
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Les builders de la communauté</h2>
+            <h3>Paketo</h3>
+            <p>(Cloud-Foundry / VMWare + Pivotal)</p>
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape>
+                    # paketo-base
+                    docker container run --rm -t paketobuildpacks/builder:base ls /cnb/buildpacks
+                </code>
+            </pre>
+            <pre><aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape>
+                # paketo-tiny construit des image distroless
+                docker container run --rm -t paketobuildpacks/builder:tiny ls /cnb/buildpacks
+            </code></pre>
+        </section>
+        <section>
+            <h1>Les builders de la communauté</h1>
+            <h2>Heroku</h2>
+            <pre><aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape>
+                # heroku
+                docker container run --rm -t heroku/builder:22 ls /cnb/buildpacks
+                </code>
+            </pre>
+            <h2>Google</h2>
+            <pre><aside class="right" onclick="showDemo(this)">> bash</aside><code data-trim data-noescape>
+                # google
+                docker container run --rm -t gcr.io/buildpacks/builder:google-22 ls /cnb/buildpacks
+            </code></pre>
+        </section>
+
+        <section>
+            <aside class="notes">35 minutes au plus tard</aside>
+
+            <h1>Construction d'image !</h1>
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+# construction d'une image
+pack build petclinic:demo --builder paketobuildpacks/builder:base
+            </code></pre>
+
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+# parcours des layers construite avec dive
+dive petclinic:demo
+            </code></pre>
+
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+# inspection de l'image
+docker image inspect petclinic:demo | bat -l json
+            </code></pre>
+        </section>
+
+        <section>
+            <h1>L'image produite</h1>
+            <div class="two-cols">
+                <img src="assets/buildpacks-diagrams-image-layers-buildpacks.svg"/>
+                <div>
+                    <p>Respecte les bonnes pratiques de layering de Spring Boot</p>
+                    <p>Est plus légère que celle proposée par Spring Boot</p>
+                    <pre>
+                        <aside class="left">> bash</aside>
+                        <code>
+REPOSITORY   TAG          IMAGE ID   SIZE    CREATED
+petclinic    dockerfile   3c06306a   409MB   7 minutes ago
+petclinic    demo         c3448bd3   315MB   43 years ago
+            </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h1>Une image produite pour une appli NodeJS</h1>
+            <img src="assets/buildpacks-diagrams-image-layers-buildpacks-node.svg"/>
         </section>
 
         <section>
@@ -515,94 +807,45 @@ ENTRYPOINT ["java","-cp","app:app/lib/*","hello.Application"]
             </div>
         </section>
 
+        <section data-state="section-title no-logo" data-background-image="assets/venti-views-1cqIcrWFQBI-unsplash.jpg">
+            <h1>Quels avantages ?</h1>
+        </section>
+
         <section>
-            <h2>C'est quoi les CNB ? Comment ça fonctionne ?</h2>
+            <h2>En vrac</h2>
             <ul>
-                <li>builder : une image OCI qui va contenir tous les scripts et buildpacks pour construire une application</li>
-                <li>les buildpacks : implémentent chacun une logique de construction pour un langage ou un runtime</li>
+                <li>Plus besoin de maintenir un <code>Dockerfile</code></li>
+                <li>Gestion de cache, réutilisation de layers existantes</li>
+                <li>Modularité</li>
             </ul>
         </section>
 
         <section>
-            <h2>Un buildpack est composé de 2 fichiers :</h2>
-            <ul>
-                <li>bin/detect : indique si le buildpack doit être activé</li>
-                <li>bin/build : contribue à la construction d'une ou plusieurs layers</li>
-            </ul>
-        </section>
-        <section>
-            <h2>Le builder contient des scripts "lifecycle" qui :</h2>
-            <ol>
-                <li>Montent le code source dans un répertoire <code>/workspace</code></li>
-                <li>Interrogent chaque buildpack avec "detect"</li>
-                <li>Exécutent tous les buildpacks qui doivent être exécutés</li>
-                <li>Chaque buildpack contribue une ou plusieurs layers dans <code>/layer</code></li>
-                <li>Les layers dans <code>/layer</code> sont exportées pour créer une image OCI !</li>
-            </ol>
-        </section>
-        <section>
-            <div class="r-stack">
-                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-1.svg"/>
-                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-2.svg"/>
-                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-3.svg"/>
-                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-4.svg"/>
-                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-5.svg"/>
-                <img class="fragment fade-in-then-out" src="assets/buildpacks-diagrams-builder-6.svg"/>
-                <img class="fragment fade-in" src="assets/buildpacks-diagrams-builder-all.svg"/>
-            </div>
-        </section>
-        <section>
-            <h2>Mais aussi</h2>
-            <ul>
-                <li>Le builder peut charger du cache depuis un registry OCI  (<code>.m2/</code>, <code>node_modules/</code>)</li>
-                <li>Les layers peuvent être reproductibles</li>
-                <li>Le builder ne s'exécute pas en <code>root</code></li>
-            </ul>
-        </section>
-        <section>
-            <h1>Outillage</h1>
-            <p>Le CLI <code>pack</code> permet d'exécuter des builders, pour construire des images.</p>
-            <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-# installation du CLI avec apt
-sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
-sudo apt-get update
-sudo apt-get install pack-cli
-            </code></pre>
-            <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    # premiers secours
-                    pack --help
-            </code></pre>
-        </section>
-        <section>
-            <h1>Démo !</h1>
-            <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-# construction d'une image
-pack build petclinic:demo --builder paketobuildpacks/builder:base
-            </code></pre>
-
-            <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-# parcours des layers construite avec dive
-dive petclinic:demo
-            </code></pre>
-
-            <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-# inspection de l'image
-docker image inspect petclinic:demo | bat -l json
-            </code></pre>
+            <h1>SBoM</h1>
+            <p>Software Bill of Materials</p>
+            <p>Chaque buildpack contribue à la construction d'un SBoM dans une layer dédiée</p>
+            <p>C'est vos RSSI et vos RSO qui vont être contents 😃</p>
         </section>
 
         <section>
-            <h2>Reproductibilité ? 🤔</h2>
+            <h1>Reproductibilité des builds ? 🤔</h1>
+            <p>À partir du même code source, produit strictement le même binaire / la même image, avec le même digest
+                <code>sha256</code>&nbsp;!</p>
+            <p>Nécessite de mettre à <code>"0"</code> les dates des fichiers.</p>
+            <pre>
+                <aside class="right">{} JSON</aside>
+                <code class="language-json">"Created": "1980-01-01T00:00:01Z"</code></pre>
+            <pre>
+                <aside class="right">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+REPOSITORY   TAG             IMAGE ID       CREATED        SIZE
+petclinic    demo            c3448bd3501d   43 years ago   315MB
+            </code></pre>
+            <p>Ça évite de produire de "nouvelles" layers si du code n'a pas changé (exemple, les libs)</p>
+        </section>
+
+        <section>
+            <h2>Reproductibilité des builds ? 🤔</h2>
             <pre>
                 <aside class="right" onclick="showDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
@@ -622,88 +865,48 @@ diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image 
         </section>
 
         <section>
-            <h1>L'image produite</h1>
-            <div class="two-cols">
-                <img src="assets/buildpacks-diagrams-image-layers-buildpacks.svg"/>
-                <div>
-                    <p>Respecte les bonnes pratiques de layering de Spring Boot</p>
-                    <p>Est plus légère que celle proposée par Spring Boot</p>
-                    <pre>
-                <aside class="left">> bash</aside>
-                <code>
-REPOSITORY   TAG             IMAGE ID       CREATED         SIZE
-petclinic    dockerfile      3c06306a5640   7 minutes ago   409MB
-petclinic    demo            c3448bd3501d   43 years ago    315MB
-            </code></pre>
-                </div>
-            </div>
-
+            <h2>Reproductibilité des builds ? 🤯</h2>
+            <p>Les images buildées sur une CI et sur le poste développeur ont la même signature !</p>
+            <p>Les images buildées par deux pipelines de CI consécutifs sont identiques !</p>
         </section>
 
         <section>
-            <h1>Une image produite pour une appli NodeJS</h1>
-            <img src="assets/buildpacks-diagrams-image-layers-buildpacks-node.svg"/>
+            <h1>Le rebase d'image</h1>
+            <p>Oui, ça veut bien dire ce que vous imaginez !</p>
+            <img src="assets/buildpacks-diagrams-image-layers-rebase.svg"/>
         </section>
 
         <section>
-            <h1>SBoM</h1>
-            <p>Software Bill of Materials</p>
-            <p>Chaque buildpack contribue à la construction d'un SBoM dans une layer dédiée (Software Bill Of Material)</p>
-            <p>C'est vos RSSI et vos RSO qui vont être contents 😃</p>
-        </section>
-
-        <section>
-            <h1>Reproductibilité des builds</h1>
-            <p>À partir du même code source, produit strictement le même binaire / la même image, avec le même digest sha256 !</p>
-            <p>Nécessite de mettre à <code>"0"</code> les dates des fichiers.</p>
-            <pre>
-                <aside class="right">{} JSON</aside>
-                <code class="language-json">"Created": "1980-01-01T00:00:01Z"</code></pre>
+            <h1>Le rebase d'image</h1>
             <pre>
                 <aside class="right">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
-REPOSITORY   TAG             IMAGE ID       CREATED        SIZE
-petclinic    demo            c3448bd3501d   43 years ago   315MB
+                pack rebase petclinic:demo --run-image &lt;new-base-image&gt;
             </code></pre>
-            <p>Ça évite de produire de "nouvelles" layers si du code n'a pas changé (exemple, les libs)</p>
         </section>
 
         <section>
-            <h1>Les principaux builders disponibles</h1>
-            <h2>Paketo</h2>
-            <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
-                <code data-trim data-noescape>
-                    # paketo-base
-                    docker container run --rm -t paketobuildpacks/builder:base ls /cnb/buildpacks
-                </code>
-            </pre>
-            <pre><aside class="right" onclick="showDemo(this)">> bash</aside>
-                <code data-trim data-noescape>
-                # paketo-tiny construit des image distroless
-                docker container run --rm -t paketobuildpacks/builder:tiny ls /cnb/buildpacks
-            </code></pre>
-        </section>
-        <section>
-            <h1>Les principaux builders disponibles</h1>
-            <h2>Heroku</h2>
-            <pre><aside class="right" onclick="showDemo(this)">> bash</aside>
-                <code data-trim data-noescape>
-                # heroku
-                docker container run --rm -t heroku/builder:22 ls /cnb/buildpacks
-                </code>
-            </pre>
-            <h2>Google</h2>
-            <pre><aside class="right" onclick="showDemo(this)">> bash</aside><code data-trim data-noescape>
-                # google
-                docker container run --rm -t gcr.io/buildpacks/builder:google-22 ls /cnb/buildpacks
-            </code></pre>
+            <h1>Le rebase d'image</h1>
+            <p>Se fait au niveau du <i>✈️ Manifest</i></p>
+            <p>Implémenté par la plupart des builders sur la couche "distribution"</p>
+            <p>Permet de modifier les layers basses d'une image, sans avoir besoin de la reconstruire</p>
+            <p>Permet de patcher rapidement une image, sans rebuild</p>
         </section>
 
         <section>
             <h1>Créer son propre builder 💡</h1>
             <p>Choisir son image de base</p>
+            <p>Réutiliser des buildpacks existants</p>
             <p>Implémenter les langages manquants</p>
+        </section>
+
+        <section data-state="section-title no-logo" data-background-image="assets/venti-views-1cqIcrWFQBI-unsplash.jpg">
+            <h1>Take-aways</h1>
+            <aside class="notes">
+                2 minutes
+
+                On va commencer par regarder quelques Dockerfile, et se poser la question, comment docker construit une image?
+            </aside>
         </section>
 
         <section>
@@ -714,24 +917,35 @@ petclinic    demo            c3448bd3501d   43 years ago   315MB
                 <li>Gestion du cache intégrée</li>
                 <li>Facile d'utilisation</li>
                 <li>Implémente les bonnes pratiques de layering, sécurité</li>
-                <li>Rebase d'images 🤯</li>
                 <li>Reproductibilité des builds 🤯</li>
+                <li>Rebase d'images 🤯</li>
             </ul>
         </section>
 
         <section>
-            <h1>Ce qui est moins cool 😥</h1>
+            <h1>Mais... 😥</h1>
             <ul>
                 <li>Créer son propre builder, c'est compliqué</li>
                 <li>Le CLI <code>pack</code> utilise Docker, ou Podman</li>
-                <li>Mais y'a moyen d'exécuter un builder sans Docker</li>
+                <li>
+                    Mais y'a moyen d'exécuter un builder sans Docker&nbsp;:
+                <ul>
+                    <li><code>kpack</code></li>
+                    <li><code>tekton</code></li>
+                </ul>
+                </li>
+                <li>Customisation pas forcément évidente</li>
             </ul>
         </section>
 
-        <section>
-            <h1>Le rebase d'images</h1>
-            <p>Implémenté par la plupart des builders sur la couche "distribution"</p>
-            <p>Permet de modifier les layers basses d'une image, sans avoir besoin de la reconstruire</p>
+        <section class="two-cols">
+            <h1>Merci pour votre attention !</h1>
+            <p>
+                Un petit feedback ? =>
+                <img style="width: 30%; height: 30%;" class="img-inline" src="assets/qr-code.png"/>
+            </p>
+
+            <h2>Julien Wittouck - <img style="height: 1em; vertical-align: middle;" src="assets/twitter-logo.png"/> @CodeKaio</h2>
         </section>
 
     </div>
@@ -758,6 +972,20 @@ petclinic    demo            c3448bd3501d   43 years ago   315MB
         // Learn about plugins: https://revealjs.com/plugins/
         plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
     });
+
+    window.addEventListener('keydown', recordKey);
+
+    function recordKey(e) {
+        if(e.key === 'd'){
+            showDemo()
+        }
+        if(e.key ==='e'){
+            hideDemo()
+        }
+    }
+
+
 </script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
 </html>
