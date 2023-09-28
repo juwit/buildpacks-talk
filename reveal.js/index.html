@@ -13,7 +13,7 @@
     <!-- Theme used for syntax highlighted code -->
     <link rel="stylesheet" href="css/a11y-light.css">
 
-    <link rel="stylesheet" href="css/sunny-tech.css">
+    <link rel="stylesheet" href="css/cloud-nord.css">
 
     <style>
         .img-inline {
@@ -166,7 +166,7 @@
 </div>
 <div class="reveal">
 
-    <div class="sunny-tech-logo"></div>
+    <div class="cloud-nord-logo"></div>
 
     <div class="slides">
 
@@ -222,24 +222,19 @@
                         Salut 👋
                         <br>
                         Moi c’est Julien</h1>
-                    <h3 style="text-align: start">
+                    <h4 style="text-align: start">
                         Freelance @CodeKaio<br/>
                         Associé @Ekité<br/>
                         Teacher @univ-lille<br/>
                         <br/>
-                        👶 Speaker (DevFest Lille - Sunny Tech)<br/>
+                        👶 Speaker (DevFest Lille - Sunny Tech - Cloud Nord)<br/>
                         🔎 Reviewer Cloud Nord<br/>
-                    </h3>
+                    </h4>
                 </div>
                 <div class="r-stack">
                     <img class="" src="assets/profile-picture.png"/>
                 </div>
             </div>
-        </section>
-
-        <section>
-            <h1>Allez, on embarque !</h1>
-            <video style="height: 800px;" data-autoplay muted loop src="assets/pirat-dogs-trimmed.mp4"></video>
         </section>
 
         <section data-state="section-title no-logo" data-background-image="assets/venti-views-1cqIcrWFQBI-unsplash.jpg">
@@ -850,7 +845,7 @@ petclinic    demo            c3448bd3501d   43 years ago   315MB
                 <aside class="right" onclick="showDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
 # pull d'une image construite précédemment
-docker image pull rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-base
+docker image pull rg.fr-par.scw.cloud/cloud-nord-buildpacks/petclinic:paketo-base
             </code></pre>
 
             <pre>
@@ -858,9 +853,9 @@ docker image pull rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-bas
                 <code data-trim data-noescape class="language-bash">
 # comparaison des layers
 docker image inspect petclinic:demo | jq '.[].RootFS'
-docker image inspect rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-base | jq '.[].RootFS'
+docker image inspect rg.fr-par.scw.cloud/cloud-nord-buildpacks/petclinic:paketo-base | jq '.[].RootFS'
 
-diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image inspect rg.fr-par.scw.cloud/sunny-tech-buildpacks/petclinic:paketo-base | jq '.[].RootFS')
+diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image inspect rg.fr-par.scw.cloud/cloud-nord-buildpacks/petclinic:paketo-base | jq '.[].RootFS')
             </code></pre>
         </section>
 
