@@ -35,8 +35,10 @@ i {
     background-repeat: no-repeat;
     background-position-y: bottom;
     background-position-x: right;
+    background-size: 50%;
     filter: blur(10px);
 }
+
 .no-logo .sunny-tech-logo {
     visibility: hidden;
 }
@@ -107,4 +109,26 @@ code {
 }
 .fragment.not-present.visible {
     display: inline;
+}
+
+
+/* pdf export styles */
+.pdf-page .slide-background {
+    background-image: url("/assets/sunnytech-logo.svg");
+    background-repeat: no-repeat;
+    background-position: 660px 300px;
+    background-size: 50%;
+    filter: blur(4px);
+}
+
+.pdf-page [data-state="section-title no-logo"] h1 {
+    background-color: white;
+    position: absolute;
+    bottom: 3rem;
+}
+
+div ~ section[data-state="no-logo"]{}
+
+.pdf-page [data-state="no-logo"] {
+    background-image: none;
 }

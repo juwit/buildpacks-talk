@@ -969,6 +969,9 @@ diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image 
 
         hash: true,
 
+        pdfMaxPagesPerSlide: 1,
+        pdfSeparateFragments: true,
+
         // Learn about plugins: https://revealjs.com/plugins/
         plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
     });
