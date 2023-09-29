@@ -11,6 +11,8 @@
     "test": "gulp test",
     "start": "gulp serve",
     "start:watch": "wds",
+    "start-gnome-server": "node gnome-server.mjs",
+    "start-reveal-server": "node reveal-server.js",
     "build": "gulp build"
   },
   "author": {
