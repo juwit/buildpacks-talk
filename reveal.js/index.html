@@ -523,7 +523,7 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
             <pre>
                 <aside class="right" onclick="showDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
-                    docker image inspect eclipse-temurin:17.0.7_7-jdk | bat -l json
+                    docker image inspect eclipse-temurin:17.0.8.1_1-jdk | bat -l json
                 </code>
             </pre>
 
@@ -606,10 +606,18 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
         </section>
 
         <section>
+            <video data-autoplay class="r-stretch" src="assets/buildpacks-cropped.mp4"></video>
+        </section>
+
+        <section>
             <h2>builder</h2>
             <p>construit une image</p>
             <h2>buildpack</h2>
             <p>contribue à une ou plusieurs layers dans la construction</p>
+            <h2>build image</h2>
+            <p>image de base utilisée par le builder</p>
+            <h2>run image</h2>
+            <p>image de base des futures images applicatives</p>
         </section>
 
         <section>
@@ -895,6 +903,12 @@ diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image 
             <p>Implémenter les langages manquants</p>
         </section>
 
+        <section>
+            <h1>Extensions des buildpacks 💡</h1>
+            <p>Permet d'étendre des builder / buildpacks sans avoir besoin de les modifier !</p>
+            <p>Installer un binaire dans la 'Build' ou 'Run' image</p>
+        </section>
+
         <section data-state="section-title no-logo" data-background-image="assets/venti-views-1cqIcrWFQBI-unsplash.jpg">
             <h1>Take-aways</h1>
             <aside class="notes">
@@ -921,6 +935,7 @@ diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image 
             <h1>Mais... 😥</h1>
             <ul>
                 <li>Créer son propre builder, c'est compliqué</li>
+                <li>Pas de support des architectures type ARM (aucun builder disponible)</li>
                 <li>Le CLI <code>pack</code> utilise Docker, ou Podman</li>
                 <li>
                     Mais y'a moyen d'exécuter un builder sans Docker&nbsp;:
