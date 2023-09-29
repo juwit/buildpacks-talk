@@ -44,6 +44,20 @@ app.get( '/notes/:socketId', ( req, res ) => {
 	fs.createReadStream( opts.revealDir + '/notes.html' ).pipe( res );
 });
 
+function getIPAddress() {
+	let interfaces = require('os').networkInterfaces();
+	for (let devName in interfaces) {
+		let iface = interfaces[devName];
+
+		for (let i = 0; i < iface.length; i++) {
+			let alias = iface[i];
+			if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal)
+				return alias.address;
+		}
+	}
+	return '0.0.0.0';
+}
+
 // Actually listen
 server.listen( opts.port || null );
 
@@ -52,8 +66,9 @@ let brown = '\033[33m',
 	reset = '\033[0m';
 
 let slidesLocation = 'http://localhost' + ( opts.port ? ( ':' + opts.port ) : '' );
+let notesLocation = 'http://' + getIPAddress() + ( opts.port ? ( ':' + opts.port ) : '/notes/12' );
 
 console.log( brown + 'reveal.js - Speaker Notes' + reset );
 console.log( '1. Open the slides at ' + green + slidesLocation + reset );
-console.log( '2. Click on the link in your JS console to go to the notes page' );
+console.log( '2. Open the notes at ' + green + notesLocation + reset);
 console.log( '3. Advance through your slides and your notes will advance automatically' );
