@@ -29,9 +29,9 @@ function move(id, position) {
     const {x,y,width, height} = position;
     console.log(position);
 
-    console.log(`wmctrl -ir ${id} -e 0,${1920+x},${y},${width},${height}`)
+    console.log(`wmctrl -ir ${id} -e 0,${x},${y},${width},${height}`)
 
-    execSync(`wmctrl -ir ${id} -e 0,${1920+x},${y},${width},${height}`);
+    execSync(`wmctrl -ir ${id} -e 0,${x},${y},${width},${height}`);
     execSync(`wmctrl -ir ${id} -b remove,below`);
     execSync(`wmctrl -ir ${id} -b add,above`);
 }
@@ -124,7 +124,7 @@ async function startTerminal(){
     typefast(`
 PROMPT='%F{blue}%scloud-nord%f $ '
 history -p
-cd ~/workspaces/sunny-tech/buildpacks-talk/spring-petclinic
+cd ~/workspaces/github/buildpacks-talk/spring-petclinic
 clear
 `);
 
