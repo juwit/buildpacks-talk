@@ -1,7 +1,6 @@
 let http      = require('http');
 let express   = require('express');
 let fs        = require('fs');
-let mustache  = require('mustache');
 
 let app       = express();
 let server    = http.createServer(app);
@@ -41,13 +40,8 @@ app.get('/', ( req, res ) => {
 });
 
 app.get( '/notes/:socketId', ( req, res ) => {
-
-	fs.readFile( opts.pluginDir + '/notes.html', ( err, data ) => {
-		res.send( mustache.render( data.toString(), {
-			socketId : req.params.socketId
-		}));
-	});
-
+	res.writeHead( 200, { 'Content-Type': 'text/html' } );
+	fs.createReadStream( opts.revealDir + '/notes.html' ).pipe( res );
 });
 
 // Actually listen
