@@ -961,6 +961,7 @@ diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image 
         height: 720,
 
         slideNumber: true,
+        totalTime: 45*60, // 45 minutes in seconds
 
         hash: true,
 
@@ -981,6 +982,8 @@ diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image 
 
 
 </script>
+<script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+<script src="plugin/notes/client.js"></script>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
 </html>
