@@ -351,7 +351,7 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
             </ul>
         </section>
 
-        <section>
+        <section data-visibility="hidden">
             <h2>Comment font les développeurs qui doivent écrire un <code>🐋 Dockerfile</code> ?</h2>
             <ul>
                 <li>🤮 Au pire : Stackoverflow, ChatGPT, ou un tutoriel random</li>
@@ -364,7 +364,7 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
             <h2>Aucun être humain ne devrait écrire des <code>🐋 Dockerfile</code>, ou des tonnes de <code>🥴 YAML</code></h2>
         </section>
 
-        <section>
+        <section data-visibility="hidden">
             <h2>Et c'est pire en entreprise</h2>
             <p>Chaque projet a son propre <code>Dockerfile</code>, forcément différent des autres</p>
             <h3>Bienvenue en enfer 👿</h3>
@@ -458,10 +458,10 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
             </ul>
         </section>
         <section>
-            <p><code>eclipse-temurin:17.0.7_7-jdk</code></p>
+            <p><code>eclipse-temurin:17.0.8.1_1-jdk</code></p>
             <pre>
                 <aside class="right">📦 config.json</aside>
-                <code data-trim data-noescape data-line-numbers="|2|13-20|6|29-32|21-23">
+                <code data-trim data-noescape data-line-numbers>
 {
 	"architecture": "amd64",
 	"config": {
@@ -526,7 +526,7 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
                     docker image inspect eclipse-temurin:17.0.8.1_1-jdk | bat -l json
                 </code>
             </pre>
-
+            <!--
             <pre>
                 <aside class="right" onclick="showDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
@@ -534,6 +534,7 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
                     dive petclinic:dockerfile
                 </code>
             </pre>
+            -->
         </section>
 
         <section>
@@ -545,8 +546,8 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
             </ul>
         </section>
 
-        <section>
-            <!-- TODO illustration -->
+        <section data-state="no-logo" data-background-image="assets/thinking.jpg" data-background-opacity="0.5">
+            <h1>L'instant philosophie</h1>
             <h2>Et si ?</h2>
             <p>On pouvait générer tout ça ?</p>
             <p>On pourrait créer des images OCI, sans avoir besoin de 🐋&nbsp;Docker ou d'un <code>Dockerfile</code> !</p>
@@ -635,7 +636,7 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
             <ol>
                 <li>Code source dans un répertoire <code>/workspace</code></li>
                 <li>Interroge chaque buildpack avec <code>/bin/detect</code></li>
-                <li>Exécute tous les buildpacks qui doivent être exécutés</li>
+                <li>Exécute tous les buildpacks qui doivent être exécutés avec <code>/bin/build</code></li>
                 <li>Chaque buildpack contribue une ou plusieurs layers dans <code>/layer</code></li>
                 <li>Les layers dans <code>/layer</code> sont exportées pour créer une image OCI !</li>
             </ol>
@@ -805,7 +806,7 @@ petclinic    demo         c3448bd3   315MB   43 years ago
                 </span>
                 <span class="fragment">
                     <img src="assets/logos/riff-logo.png"/>
-                    <span>Riff (Netlify)</span>
+                    <span>Riff</span>
                 </span>
             </div>
         </section>
@@ -828,6 +829,14 @@ petclinic    demo         c3448bd3   315MB   43 years ago
             <p>Software Bill of Materials</p>
             <p>Chaque buildpack contribue à la construction d'un SBoM dans une layer dédiée</p>
             <p>C'est vos RSSI et vos RSO qui vont être contents 😃</p>
+
+            <pre>
+                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+# extraction du SBOM
+pack sbom download petclinic:demo -o sbom
+tree sbom
+            </code></pre>
         </section>
 
         <section>
@@ -912,9 +921,7 @@ diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image 
         <section data-state="section-title no-logo" data-background-image="assets/venti-views-1cqIcrWFQBI-unsplash.jpg">
             <h1>Take-aways</h1>
             <aside class="notes">
-                2 minutes
-
-                On va commencer par regarder quelques Dockerfile, et se poser la question, comment docker construit une image?
+                40 minutes
             </aside>
         </section>
 

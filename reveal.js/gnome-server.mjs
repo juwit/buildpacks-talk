@@ -60,7 +60,7 @@ app.post('/move-window', async (req, res) => {
 
     move(terminal.id, req.body);
 
-    const windowId = execSync(`xdotool search --onlyvisible --limit 1 --class "Tilix"`);
+    const windowId = execSync(`xdotool search --onlyvisible --class "Tilix"`);
     execSync(`xdotool windowactivate ${windowId}`);
 
     res.sendStatus(200);
@@ -81,13 +81,13 @@ app.post('/hide-window', (req, res) => {
 
         id} -b add,below`);
 
-    const windowId = execSync(`xdotool search --onlyvisible --limit 1 --class "Firefox"`);
+    const windowId = execSync(`xdotool search --onlyvisible --class "Firefox"`);
     execSync(`xdotool windowactivate ${windowId}`);
     res.sendStatus(200);
 });
 
 function zoomIn(){
-    const windowId = execSync(`xdotool search --onlyvisible --limit 1 --class "Tilix"`);
+    const windowId = execSync(`xdotool search --onlyvisible --class "Tilix"`);
     execSync(`xdotool windowactivate ${windowId}`);
     execSync(`xdotool key ctrl+plus`);
     execSync(`xdotool key ctrl+plus`);
@@ -95,7 +95,7 @@ function zoomIn(){
     execSync(`xdotool key ctrl+plus`);
 }
 function typefast(command){
-    const windowId = execSync(`xdotool search --onlyvisible --limit 1 --class "Tilix"`);
+    const windowId = execSync(`xdotool search --onlyvisible --class "Tilix"`);
     execSync(`xdotool windowactivate ${windowId}`);
     execSync(`setxkbmap fr && xdotool type "${command}"`);
 }

@@ -34,7 +34,7 @@ i {
     background-repeat: no-repeat;
     background-position-y: bottom;
     background-position-x: right;
-    filter: blur(10px);
+    filter: blur(10px) opacity(50%);
 }
 .no-logo .cloud-nord-logo {
     visibility: hidden;
