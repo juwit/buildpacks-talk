@@ -179,7 +179,7 @@
             <h1>Vous êtes au bon endroit si</h1>
             <ul>
                 <li>Vous êtes un·e Dev 🙋‍♀️</li>
-                <li>Vous être un·e Ops 🙋‍♂️</li>
+                <li>Vous êtes un·e Ops 🙋‍♂️</li>
                 <li>Vous faites souvent joujou avec Docker 🐳</li>
             </ul>
         </section>
@@ -256,8 +256,9 @@
         </section>
 
         <section>
-            <h2>Le <i>Hello World</i> Spring Boot, selon Docker 🤮</h2>
-            <p><a href="https://www.docker.com/blog/kickstart-your-spring-boot-application-development/">www.docker.com/blog</a>
+            <h2>Le <i>Hello World</i> Spring Boot, selon Docker <small>27 may 2022</small> 🤮</h2>
+            <p>
+                <a href="https://www.docker.com/blog/kickstart-your-spring-boot-application-development/">www.docker.com/blog</a>
             </p>
 
             <pre>
@@ -278,7 +279,7 @@ CMD ["./mvnw", "spring-boot:run"]
         </section>
 
         <section>
-            <h2>Le <i>Hello World</i> Spring Boot, selon Spring Boot 🤔</h2>
+            <h2>Le <i>Hello World</i> Spring Boot, selon Spring Boot <small>8 feb 2023</small> 🤔</h2>
             <p><a href="https://spring.io/guides/topicals/spring-boot-docker/">spring.io/guides</a>
             </p>
 
@@ -323,7 +324,7 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
         </section>
 
         <section>
-            <p>Ce que pense Darren Shepherd</p>
+            <p>Darren Shepherd <img style="height: 1em; vertical-align: middle;" src="assets/twitter-logo.png"/> @ibuildthecloud</p>
             <p>(former @Rancher_Labs, k3s creator)</p>
             <div class="center-tweets">
                 <blockquote class="twitter-tweet" data-dnt="true"><p lang="en" dir="ltr">So issues I have<br><br>1. Caching. I&#39;ve been told this is hard. I believe there is stupider and more effective ways to (not) do it<br>2. Layers are soooo 2018<br>3. Multi stage is cool and all, but you really only need two stages (build env, run env)<br>4. COPY is kinda pointless. <a href="https://t.co/CcuB2Axd3G">https://t.co/CcuB2Axd3G</a></p>&mdash; Darren Shepherd (@ibuildthecloud) <a href="https://twitter.com/ibuildthecloud/status/1673593464733470721?ref_src=twsrc%5Etfw">June 27, 2023</a></blockquote>
@@ -632,7 +633,7 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
             </aside>
         </section>
         <section>
-            <h2>Le builder contient des scripts <code>lifecycle</code> :</h2>
+            <h2>Le builder :</h2>
             <ol>
                 <li>Code source dans un répertoire <code>/workspace</code></li>
                 <li>Interroge chaque buildpack avec <code>/bin/detect</code></li>
