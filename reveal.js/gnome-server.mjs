@@ -122,7 +122,7 @@ async function startTerminal(){
 
     // clear history
     typefast(`
-PROMPT='%F{blue}%scloud-nord%f $ '
+PROMPT='%F{blue}G%F{red}D%F{green}G %F{yellow}>%f '
 history -p
 cd ~/workspaces/github/buildpacks-talk/spring-petclinic
 clear
