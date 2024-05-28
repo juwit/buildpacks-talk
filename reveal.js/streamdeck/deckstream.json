@@ -1,0 +1,44 @@
+{
+  "deckxstream-version": 1,
+  "brightness": 90,
+  "device": "AL43J2C03377",
+  "pages": [
+    {
+      "pageName": "default",
+      "buttons": [
+        {
+          "keyIndex": 0,
+          "icon": "/home/jwittouck/workspaces/github/service-accounts-talk/streamdeck/chrome.png",
+          "command": "/home/jwittouck/workspaces/github/service-accounts-talk/streamdeck/show-window.sh chromium"
+        },
+        {
+          "keyIndex": 1,
+          "icon": "/home/jwittouck/workspaces/github/service-accounts-talk/streamdeck/firefox.png",
+          "command": "/home/jwittouck/workspaces/github/service-accounts-talk/streamdeck/show-window.sh firefox"
+        },
+        {
+          "keyIndex": 2,
+          "icon": "/home/jwittouck/workspaces/github/service-accounts-talk/streamdeck/terminal.png",
+          "command": "/home/jwittouck/workspaces/github/service-accounts-talk/streamdeck/show-window.sh tilix"
+        },
+        {
+          "keyIndex": 3,
+          "icon": "/home/jwittouck/workspaces/github/service-accounts-talk/streamdeck/intellij.png",
+          "command": "/home/jwittouck/workspaces/github/service-accounts-talk/streamdeck/show-window.sh idea"
+        },
+        {
+          "keyIndex": 5,
+          "text": "start timer",
+          "command": "/home/jwittouck/workspaces/github/service-accounts-talk/streamdeck/start-timer.sh"
+        },
+        {
+          "keyIndex": 14,
+          "dynamic": {
+            "command": "/home/jwittouck/workspaces/github/service-accounts-talk/streamdeck/timer.sh",
+            "interval": 5000
+          }
+        }
+      ]
+    }
+  ]
+}

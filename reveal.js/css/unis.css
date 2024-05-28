@@ -1,0 +1,116 @@
+/* font */
+@import url("/assets/fonts/nokio.css");
+:root {
+    /*--r-main-font: "Nokio";*/
+    --r-heading-font: "Nokio";
+    --r-heading-text-transform: "none";
+    --r-heading1-size: 2em;
+}
+
+/* general styling */
+h1 {
+    font-family: "Nokio";
+}
+i {
+    font-style: italic;
+}
+
+/* columns layout */
+.two-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.profile {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+/* background logo */
+.gdg-logo {
+    position: fixed;
+    bottom: -100px;
+    right: -100px;
+    z-index: 1;
+    display: block;
+    width: 50%;
+    height: 50%;
+
+    background-image: url("/assets/unis.svg");
+    background-repeat: no-repeat;
+    background-position-y: bottom;
+    background-position-x: right;
+    background-size: contain;
+    filter: blur(5px) opacity(75%);
+}
+.no-logo .gdg-logo {
+    visibility: hidden;
+}
+
+/* logos hell */
+
+.logo-hell {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+.logo-hell > span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 2rem;
+}
+.logo-hell > span > img {
+    max-width: 10rem;
+    padding: 0;
+    margin: 0;
+}
+
+/* code blocks decoration */
+
+code.hljs {
+    border: solid 2px #ccc;
+    border-radius: 10px;
+
+    padding-top: 30px;
+}
+.reveal pre code {
+    /*padding-top: 2rem;*/
+    padding-left: 10px;
+}
+.reveal pre aside{
+    display: block;
+    position: absolute;
+    top: -1rem;
+
+    background: #333;
+    padding: 10px 10px 5px 10px;
+    border-radius: 10px;
+
+    font-family: "Mono";
+    font-weight: bold;
+    color: white;
+
+    z-index: 300;
+}
+.reveal pre aside.right {
+    right: 2rem;
+}
+.reveal pre aside.left {
+    left: 2rem;
+}
+
+/* inline code decoration */
+code {
+    font-weight: normal;
+    background-color: #CCC;
+    padding: 0.5rem;
+}
+
+/* custom fragments */
+.fragment.not-present {
+    display: none;
+}
+.fragment.not-present.visible {
+    display: inline;
+}

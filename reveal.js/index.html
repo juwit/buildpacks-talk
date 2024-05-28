@@ -13,7 +13,10 @@
     <!-- Theme used for syntax highlighted code -->
     <link rel="stylesheet" href="css/a11y-light.css">
 
-    <link rel="stylesheet" href="css/gdg.css">
+    <link rel="stylesheet" href="css/unis.css">
+
+    <!-- script for demo slides -->
+    <script type="text/ecmascript" src="js/demo-slides.js"></script>
 
     <style>
         .img-inline {
@@ -81,89 +84,8 @@
         }
     </style>
 
-    <script type="application/ecmascript">
-        function showDemo(element){
-            console.log(element);
-
-            const demoSlide = document.querySelector("#demo-slide");
-            demoSlide.classList.remove("hidden");
-
-            const windowPlaceholder = demoSlide.querySelector(".window");
-
-            if(element){
-                placeWindow("tilix", windowPlaceholder, element.nextElementSibling.innerText)
-            }
-            else{
-                placeWindow("tilix", windowPlaceholder, "")
-            }
-        }
-
-        function hideDemo(){
-            const demoSlide = document.querySelector("#demo-slide");
-            demoSlide.classList.add("hidden");
-
-            hideWindow("tilix");
-        }
-
-        async function type(code){
-            await gnome("/type", {type: code})
-        }
-
-        function gnome (path, body) {
-            return fetch('http://localhost:7000' + path, {
-                mode: 'cors',
-                method: (body != null) ? 'POST' : 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: (body != null) ? JSON.stringify(body) : null,
-            }).then((r) => r.json());
-        }
-
-        async function placeWindow (window, div, code) {
-            if (window == null) {
-                return;
-            }
-
-            const rect = div.getBoundingClientRect();
-            console.log(rect);
-
-            // ratio à 2 si affichage à 200%
-            const ratio = 1;
-
-            const MOZINNERSCREENY = globalThis.mozInnerScreenY;
-
-            await gnome('/move-window', {
-                id: window.id,
-                x: Math.ceil(rect.x * ratio) - 40,
-                y: Math.ceil((rect.y + MOZINNERSCREENY) * ratio) - 40,
-                width: Math.ceil(rect.width * ratio) + 80,
-                height: Math.ceil(rect.height * ratio) + 80,
-                minimize: false,
-                above: true,
-            }).catch(() => null);
-
-            await type(code);
-        }
-
-        async function hideWindow (window) {
-            if (window == null) {
-                return;
-            }
-            await gnome('/hide-window', {
-                id: window.id,
-                minimize: true,
-                above: false,
-            }).catch(() => null);
-        }
-    </script>
-
 </head>
 <body>
-<div id="demo-slide" class="hidden" style="z-index: 100">
-    <img class="logo" src="assets/logo-terminal.svg" onclick="hideDemo()">
-    <div class="window"></div>
-</div>
 <div class="reveal">
 
     <div class="gdg-logo"></div>
@@ -226,7 +148,7 @@
                     <h4 style="text-align: start">
                         👨‍💻 Freelance @CodeKaio<br/>
                         🤝 Associé @Ekité<br/>
-                        👨‍🏫 Teacher @univ-lille<br/>
+                        👨‍🏫 Teacher @univ-lille / @esgi-lille<br/>
                         <br/>
                         🎙️ Speaker (DevFest Lille - Sunny Tech - Cloud Nord - BBLs - DevOxx Fr)<br/>
                         🧑‍🤝‍🧑 Team Cloud Nord<br/>
@@ -460,7 +382,7 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
             </ul>
         </section>
         <section>
-            <p><code>eclipse-temurin:17.0.8.1_1-jdk</code></p>
+            <p><code>eclipse-temurin:21-jdk</code></p>
             <pre>
                 <aside class="right">📦 config.json</aside>
                 <code data-trim data-noescape data-line-numbers>
@@ -482,7 +404,7 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
 			"LANG=en_US.UTF-8",
 			"LANGUAGE=en_US:en",
 			"LC_ALL=en_US.UTF-8",
-			"JAVA_VERSION=jdk-17.0.7+7"
+			"JAVA_VERSION=jdk-21.0.2+3"
 		],
 		"Cmd": [
 			"jshell"
@@ -523,14 +445,14 @@ ENTRYPOINT ["java","-cp","app:app/ lib/*","hello.Application"]
         <section>
             <h3><code>docker image inspect</code> 🔍</h3>
             <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
-                    docker image inspect eclipse-temurin:17.0.8.1_1-jdk | bat -l json
+                    docker image inspect eclipse-temurin:21-jdk | bat -l json
                 </code>
             </pre>
             <!--
             <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
                     # on parcours une image avec dive !
                     dive petclinic:dockerfile
@@ -674,14 +596,14 @@ sudo apt-get update
 sudo apt-get install pack-cli
             </code></pre>
             <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
                     # premiers secours
                     pack --help
             </code></pre>
 
             <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
                     # construction d'une image OCI !
                     pack build ma-jolie-image --builder paketobuildpacks/builder:base
@@ -693,13 +615,13 @@ sudo apt-get install pack-cli
             <h3>Paketo</h3>
             <p>(Cloud-Foundry / VMWare + Pivotal)</p>
             <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape>
                     # paketo-base
                     docker container run --rm -t paketobuildpacks/builder:base ls /cnb/buildpacks
                 </code>
             </pre>
-            <pre><aside class="right" onclick="showDemo(this)">> bash</aside>
+            <pre><aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape>
                 # paketo-tiny construit des image distroless
                 docker container run --rm -t paketobuildpacks/builder:tiny ls /cnb/buildpacks
@@ -708,14 +630,14 @@ sudo apt-get install pack-cli
         <section>
             <h1>Les builders de la communauté</h1>
             <h2>Heroku</h2>
-            <pre><aside class="right" onclick="showDemo(this)">> bash</aside>
+            <pre><aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape>
                 # heroku
                 docker container run --rm -t heroku/builder:22 ls /cnb/buildpacks
                 </code>
             </pre>
             <h2>Google</h2>
-            <pre><aside class="right" onclick="showDemo(this)">> bash</aside><code data-trim data-noescape>
+            <pre><aside class="right" onclick="bashDemo(this)">> bash</aside><code data-trim data-noescape>
                 # google
                 docker container run --rm -t gcr.io/buildpacks/builder:google-22 ls /cnb/buildpacks
             </code></pre>
@@ -726,21 +648,21 @@ sudo apt-get install pack-cli
 
             <h1>Construction d'image !</h1>
             <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
 # construction d'une image
 pack build petclinic:demo --builder paketobuildpacks/builder:base
             </code></pre>
 
             <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
 # parcours des layers construite avec dive
 dive petclinic:demo
             </code></pre>
 
             <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
 # inspection de l'image
 docker image inspect petclinic:demo | bat -l json
@@ -833,7 +755,7 @@ petclinic    demo         c3448bd3   315MB   43 years ago
             <p>C'est vos RSSI et vos RSO qui vont être contents 😃</p>
 
             <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
 # extraction du SBOM
 pack sbom download petclinic:demo -o sbom
@@ -861,20 +783,20 @@ petclinic    demo            c3448bd3501d   43 years ago   315MB
         <section>
             <h2>Reproductibilité des builds ? 🤔</h2>
             <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
 # pull d'une image construite précédemment
-docker image pull rg.fr-par.scw.cloud/cloud-nord-buildpacks/petclinic:paketo-base
+docker image pull rg.fr-par.scw.cloud/talk-buildpacks/petclinic:paketo-base
             </code></pre>
 
             <pre>
-                <aside class="right" onclick="showDemo(this)">> bash</aside>
+                <aside class="right" onclick="bashDemo(this)">> bash</aside>
                 <code data-trim data-noescape class="language-bash">
 # comparaison des layers
-docker image inspect petclinic:demo | jq '.[].RootFS'
-docker image inspect rg.fr-par.scw.cloud/cloud-nord-buildpacks/petclinic:paketo-base | jq '.[].RootFS'
+docker image inspect petclinic:demo | jq '.[].RootFS' > new-image.json
+docker image inspect rg.fr-par.scw.cloud/talk-buildpacks/petclinic:paketo-base | jq '.[].RootFS' > old-image.json
 
-diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image inspect rg.fr-par.scw.cloud/cloud-nord-buildpacks/petclinic:paketo-base | jq '.[].RootFS')
+diff -s new-image.json old-image.json
             </code></pre>
         </section>
 
@@ -997,7 +919,7 @@ diff -s <(docker image inspect petclinic:demo | jq '.[].RootFS') <(docker image 
 
     function recordKey(e) {
         if(e.key === 'd'){
-            showDemo()
+            bashDemo()
         }
         if(e.key ==='e'){
             hideDemo()

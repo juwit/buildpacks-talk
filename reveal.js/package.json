@@ -13,7 +13,11 @@
     "start:watch": "wds",
     "start-gnome-server": "node gnome-server.mjs",
     "start-reveal-server": "node reveal-server.js",
-    "build": "gulp build"
+    "build": "gulp build",
+    "serve": "serve",
+    "livereload": "livereload -d",
+    "gnome-server": "node gnome-server.mjs",
+    "deckxstream": "deckxstream --config /home/jwittouck/workspaces/github/service-accounts-talk/streamdeck/deckstream.json"
   },
   "author": {
     "name": "Hakim El Hattab",
@@ -108,6 +112,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.2",
+    "deckxstream": "^2.2.2",
+    "serve": "^14.2.1"
   }
 }

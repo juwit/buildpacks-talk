@@ -93,7 +93,7 @@ app.post('/hide-window', (req, res) => {
 });
 
 function type(command){
-    execSync(`setxkbmap fr && xdotool type --clearmodifiers --delay 100  '${command}'`);
+    execSync(`setxkbmap fr && xdotool type --clearmodifiers --delay 100  "${command}"`);
 }
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
