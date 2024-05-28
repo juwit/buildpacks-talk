@@ -66,48 +66,46 @@ app.post('/move-window', async (req, res) => {
     res.sendStatus(200);
 });
 
+app.post('/show-window', async (req, res) => {
+    console.log(`show window : ${req.body.windowName}`)
+
+    try{
+        execSync(`./streamdeck/show-window.sh ${req.body.windowName}`);
+        if(req.body.windowName === "firefox"){
+            // open url too
+            execSync(`firefox ${req.body.url}`);
+        }
+        res.sendStatus(200);
+    }
+    catch (e){
+        res.sendStatus(500);
+    }
+});
+
 app.post('/hide-window', (req, res) => {
-    console.log('hide window')
-    const list = execSync('wmctrl -l', { encoding: 'utf8' });
-    const windows = list
-        .split('\n')
-        .filter((line) => line.trim() !== '')
-        .map((line) => {
-            const [id, index, hostname, ...windowName] = line.split(/ +/);
-            return { id, name: windowName.join(' ') };
-        });
-    const terminal = windows.find(({ name }) => name.startsWith('Tilix'));
-    execSync(`wmctrl -ir ${terminal.
+    console.log('hide window');
 
-        id} -b add,below`);
+    // show presentation slides
 
-    const windowId = execSync(`xdotool search --onlyvisible --class "Firefox"`);
-    execSync(`xdotool windowactivate ${windowId}`);
+    execSync(`./streamdeck/show-window.sh 'Présentation'`);
+
     res.sendStatus(200);
 });
 
-function zoomIn(){
-    const windowId = execSync(`xdotool search --onlyvisible --class "Tilix"`);
-    execSync(`xdotool windowactivate ${windowId}`);
-    execSync(`xdotool key ctrl+plus`);
-    execSync(`xdotool key ctrl+plus`);
-    execSync(`xdotool key ctrl+plus`);
-    execSync(`xdotool key ctrl+plus`);
-}
-function typefast(command){
-    const windowId = execSync(`xdotool search --onlyvisible --class "Tilix"`);
-    execSync(`xdotool windowactivate ${windowId}`);
-    execSync(`setxkbmap fr && xdotool type "${command}"`);
-}
 function type(command){
-    console.log('type : ' + command);
-    const windowId = execSync(`xdotool search --onlyvisible --limit 1 --class "Tilix"`);
-    execSync(`xdotool windowactivate ${windowId}`);
-    execSync(`setxkbmap fr && xdotool type --delay 100  "${command}"`);
+    execSync(`setxkbmap fr && xdotool type --clearmodifiers --delay 100  '${command}'`);
 }
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 app.post('/type', (req, res) => {
+    console.log('type : ' + req.body.type);
+
+    // show shell window
+    execSync(`./streamdeck/show-window.sh 'Tilix'`);
+
     type(req.body.type);
+
     res.sendStatus(200);
 });
 
@@ -115,37 +113,3 @@ app.listen(7000, () => {
     console.log(`gnome-server: listening on port ${7000}`);
 });
 
-let terminalProcess;
-async function startTerminal(){
-    terminalProcess = spawn('tilix');
-    await setTimeout(1500);
-
-    // clear history
-    typefast(`
-PROMPT='%F{blue}G%F{red}D%F{green}G %F{yellow}>%f '
-history -p
-cd ~/workspaces/github/buildpacks-talk/spring-petclinic
-clear
-`);
-
-    zoomIn();
-
-    console.log({
-        terminal: terminalProcess.pid,
-    });
-}
-
-await startTerminal();
-
-process.on('SIGINT', function () {
-    try {
-        terminalProcess.kill();
-    }
-    catch (e) {
-        console.log(e);
-    }
-});
-
-const gnomeWindows = [
-    { id: 'terminal', pid: terminalProcess.pid },
-];
